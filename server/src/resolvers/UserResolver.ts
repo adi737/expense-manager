@@ -13,6 +13,7 @@ import {
 import { User } from "../entities/User";
 import { errors, setErrors } from "../globals";
 import { validationResult } from "../utils/validation";
+import { getConnection } from "typeorm";
 
 
 
@@ -42,8 +43,8 @@ class UserResponse {
   @Field(() => String, { nullable: true })
   serverError?: string;
 
-  @Field(() => Boolean, { nullable: true })
-  ok?: boolean;
+  @Field(() => User, { nullable: true })
+  user?: User;
 }
 
 @Resolver()
@@ -74,22 +75,34 @@ export class UserResolver {
     try {
       const hashedPassword = await hash(options.password);
 
-      await User.insert({
-        username: options.username,
-        password: hashedPassword
-      });
+      // await User.insert({
+      //   username: options.username,
+      //   password: hashedPassword
+      // })
 
-      return { ok: true };
+      const user = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values([
+          {
+            username: options.username,
+            password: hashedPassword
+          },
+        ])
+        .returning('id, username')
+        .execute();
+
+      return { user: user.raw[0] };
     } catch (error) {
       if (error.code === '23505' && error.detail.includes('already exists')) {
-        setErrors({ field: 'duplicate', message: 'Username is already taken' });
+        setErrors({ field: 'username', message: 'Username is already taken' });
         return { errors }
       }
       console.error(error.message);
       return { serverError: 'server error' }
     }
   }
-
 
 
   @Mutation(() => UserResponse)
@@ -107,24 +120,40 @@ export class UserResolver {
       const user = await User.findOne({ where: { username: options.username } });
 
       if (!user) {
-        setErrors({ field: 'credentials', message: 'Invalid credentials' });
+        setErrors({ field: 'username', message: 'Invalid credentials' });
         return { errors }
       }
 
       const valid = await verify(user.password, options.password);
 
       if (!valid) {
-        setErrors({ field: 'credentials', message: 'Invalid credentials' });
+        setErrors({ field: 'password', message: 'Invalid credentials' });
         return { errors }
       }
 
       // login successful
       req.session.userId = user.id;
-      return { ok: true }
+      return { user }
     } catch (error) {
       console.error(error.message)
       return { serverError: 'server error' }
     }
   }
 
+  @Mutation(() => Boolean)
+  logout(
+    @Ctx() { req, res }: MyContext
+  ): Promise<boolean> {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        if (err) {
+          console.error(err);
+          resolve(false);
+          return;
+        }
+
+        res.clearCookie('id');
+        resolve(true);
+      }));
+  }
 }

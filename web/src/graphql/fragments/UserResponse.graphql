@@ -1,0 +1,11 @@
+fragment UserResponseField on UserResponse {
+    user {
+      id
+      username
+    }
+    errors {
+      field
+      message
+    }
+    serverError
+}

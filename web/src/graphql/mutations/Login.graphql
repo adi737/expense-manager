@@ -1,0 +1,5 @@
+mutation Login($options: InputValues!) {
+  login(options: $options) {
+    ...UserResponseField
+  }
+}

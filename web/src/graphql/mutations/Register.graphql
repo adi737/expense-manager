@@ -1,0 +1,5 @@
+mutation Register($options: InputValues!) {
+  register(options: $options) {
+    ...UserResponseField
+  }
+}

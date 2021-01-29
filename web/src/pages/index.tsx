@@ -1,10 +1,26 @@
-import { Container } from '../components/Container'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
+import Navigation from "../components/Navigation";
+import { useUserQuery } from "../generated/graphql";
 
-const Index = () => (
-  <Container height="100vh">
-    <DarkModeSwitch />
-  </Container>
-)
+interface IndexProps {
 
-export default Index
+}
+
+const Index: React.FC<IndexProps> = ({ }) => {
+  const { loading, data, error } = useUserQuery();
+
+  return loading || error ?
+    <div>loading...</div>
+    :
+    data?.user === null ?
+      <>
+        <Navigation />
+        <p>not authenticated</p>
+      </>
+      :
+      <>
+        <Navigation />
+        <p>{data?.user?.username}</p>
+      </>
+}
+
+export default Index;
