@@ -5,9 +5,8 @@ import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
 import { createConnection } from "typeorm";
 import 'dotenv/config';
-// import cookieParser from 'cookie-parser'
 import cors from "cors";
-import redis from 'redis';
+import Redis from "ioredis";
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { __prod__ } from "./globals";
@@ -18,13 +17,13 @@ import path from "path";
 const app = express();
 
 const RedisStore = connectRedis(session);
-const redisClient = redis.createClient();
+const redis = new Redis();
 
 app.use(
     session({
         name: 'id',
         store: new RedisStore({
-            client: redisClient,
+            client: redis,
             disableTouch: true
         }),
         cookie: {
@@ -38,7 +37,6 @@ app.use(
         saveUninitialized: false
     })
 )
-// app.use(cookieParser());
 app.use(
     cors({
         origin: 'http://localhost:3000',
@@ -66,7 +64,7 @@ const connectApolloServer = async () => {
             schema: await buildSchema({
                 resolvers: [UserResolver]
             }),
-            context: ({ req, res }) => ({ req, res })
+            context: ({ req, res }) => ({ req, res, redis })
         });
 
         apolloServer.applyMiddleware({ app, cors: false });

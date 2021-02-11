@@ -1,0 +1,5 @@
+query activateAccount($id: String!, $token: String!) {
+  activateAccount(id: $id, token: $token) {
+    ...UserResponseField
+  }
+}

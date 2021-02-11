@@ -7,13 +7,14 @@ interface InputFieldProps {
   label: string;
   placeholder: string;
   submitting: boolean;
+  required?: boolean;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, submitting, ...props }) => {
+const InputField: React.FC<InputFieldProps> = ({ required = true, label, submitting, ...props }) => {
   const [field, { error }] = useField(props);
 
   return (
-    <FormControl isInvalid={!!error} isRequired isDisabled={submitting}>
+    <FormControl isInvalid={!!error} isRequired={required} isDisabled={submitting}>
       <FormLabel htmlFor={field.name}>{label}</FormLabel>
       <Input {...field} {...props} id={field.name} />
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}

@@ -1,24 +1,17 @@
 import { clearErrors, setErrors } from "../globals"
 
-export const validationResult = ({ username, password }: { username: string; password: string }) => {
-  if (username.length > 3 && username.length < 11 && password.length > 3 && password.length < 16) {
-    clearErrors();
-  } else {
-    clearErrors();
-    if (username.length < 4) {
-      setErrors({ field: 'username', message: 'Username length must be at least 4 char' });
-    }
+export const validationResult = ({ email, password }: { email: string; password: string }) => {
+  const validEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const validPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/;
 
-    if (username.length > 10) {
-      setErrors({ field: 'username', message: 'Username length must be 10 char or less' });
-    }
+  clearErrors();
 
-    if (password.length < 4) {
-      setErrors({ field: 'password', message: 'Password length must be at least 4 char' });
-    }
-
-    if (password.length > 15) {
-      setErrors({ field: 'password', message: 'Password length must be 15 char or less' });
-    }
+  if (!validEmail.test(email)) {
+    setErrors({ field: 'email', message: 'Include valid email' })
   }
+
+  if (!validPassword.test(password)) {
+    setErrors({ field: 'password', message: 'Include at least 6 characters, one lowercase, one uppercase, one digit and one special character.' })
+  }
+
 }

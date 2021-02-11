@@ -1,11 +1,9 @@
 fragment UserResponseField on UserResponse {
     user {
-      id
-      username
+      ...UserField
     }
     errors {
-      field
-      message
+      ...ErrorsField
     }
     serverError
 }

@@ -20,14 +20,14 @@ const Register: React.FC<RegisterProps> = ({ }) => {
   return (
     <Container maxW='3xl' mt='4rem'>
       <Formik
-        initialValues={{ username: "", password: '' }}
+        initialValues={{ email: "", password: '' }}
         onSubmit={async (values, actions) => {
           const { data } = await register({ variables: { options: values } });
 
           if (data?.register.errors) {
             actions.setErrors(toErrorMap(data.register.errors))
           } else {
-            router.push('/');
+            router.push('/successMessage');
           }
 
           actions.setSubmitting(false)
@@ -36,10 +36,10 @@ const Register: React.FC<RegisterProps> = ({ }) => {
         {({ isSubmitting }) => (
           <Form>
             <InputField
-              type='text'
-              name="username"
-              placeholder="username"
-              label="Username"
+              type='email'
+              name="email"
+              placeholder="email"
+              label="Email"
               submitting={isSubmitting}
             />
             <InputField
