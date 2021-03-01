@@ -1,37 +1,28 @@
 import { Button, Link } from "@chakra-ui/react";
+// import { useRouter } from "next/dist/client/router";
 import NextLink from 'next/link'
 import { useState } from "react";
-import { useLogoutMutation, UserDocument, UserQuery } from "../generated/graphql";
+import { ExpensesQuery, useLogoutMutation } from "../generated/graphql";
 import MenuLinks from "./MenuLinks";
 import MenuToggle from "./MenuToggle";
 import NavbarContainer from "./NavbarContainer";
 
 interface NavigationProps {
-  data?: UserQuery;
+  data?: ExpensesQuery;
   dataLoading: boolean;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ data, dataLoading }) => {
-  const [logout, { loading }] = useLogoutMutation({
-    update(cache) {
-      cache.writeQuery({
-        query: UserDocument,
-        data: {
-          user: null
-        }
-      })
-    }
-  });
+  const [logout, { client: { resetStore } }] = useLogoutMutation();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   let body = null;
 
   if (dataLoading) {
     // return null;
-  } else if (!data) {
-    // return null;
-  } else if (data?.user === null) {
+  } else if (!data?.expenses) {
     body = (
       <>
         <NextLink href='/login' passHref>
@@ -48,7 +39,21 @@ const Navigation: React.FC<NavigationProps> = ({ data, dataLoading }) => {
     )
   } else {
     body = (
-      <Button variant='link' onClick={() => logout()} isLoading={loading}>
+      <Button
+        color='black'
+        variant='link'
+        onClick={
+          async () => {
+            try {
+              setLoading(true);
+              await logout();
+              await resetStore();
+            } catch (error) {
+              throw new Error(error);
+            }
+          }
+        }
+        isLoading={loading}>
         Sign out
       </Button>
     )
@@ -61,10 +66,6 @@ const Navigation: React.FC<NavigationProps> = ({ data, dataLoading }) => {
     </NavbarContainer>
   );
 }
-
-// <Box w='100%' p={5}>
-//   {body}
-// </Box>
 
 
 export default Navigation;

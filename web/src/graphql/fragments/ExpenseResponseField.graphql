@@ -1,0 +1,9 @@
+fragment ExpenseResponseField on ExpenseResponse {
+  expense {
+    ...ExpenseField
+  }
+  errors {
+    ...ErrorsField
+  }
+  auth
+}

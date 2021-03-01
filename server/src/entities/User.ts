@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { Expense } from "./Expense";
 
 @ObjectType()
 @Entity('users')
@@ -20,9 +21,12 @@ export class User extends BaseEntity {
     @Column({ unique: true, nullable: false })
     email!: string;
 
-    @Column({ nullable: false })
+    @Column()
     password!: string;
 
     @Column({ default: false })
     isActive!: boolean;
+
+    @OneToMany(() => Expense, expense => expense.user)
+    expenses!: Expense[];
 }

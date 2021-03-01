@@ -1,0 +1,6 @@
+fragment ExpenseField on Expense {
+  id
+  category
+  product
+  price
+}

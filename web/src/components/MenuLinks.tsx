@@ -12,11 +12,10 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ isOpen, body }) => {
       flexBasis={{ base: "100%", md: "auto" }}
     >
       <Stack
-        spacing={6}
+        spacing={2}
         align="center"
         justify={["center", "center", "flex-start", "flex-start"]}
         direction={["column", "column", "row", "row"]}
-        pt={[2, 2, 0, 0]}
       >
         {body}
       </Stack>

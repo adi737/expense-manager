@@ -1,20 +1,25 @@
-import { Container, Button, AlertIcon, Alert } from "@chakra-ui/react";
+import { Container, Button, AlertIcon, Alert, Text } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
-import InputField from "../../components/InputField";
-import { useResetPasswordMutation } from "../../generated/graphql";
-import { toErrorMap } from "../../utils/toErrorMap";
+import InputField from "../components/InputField";
+import { useResetPasswordMutation } from "../generated/graphql";
+import { toErrorMap } from "../utils/toErrorMap";
 
 interface ResetPasswordProps {
-  id: string;
-  token: string;
+  id: string | null;
+  token: string | null;
 }
 
 const ResetPassword: React.FC<ResetPasswordProps> = ({ id, token }) => {
   const [resetPassword, { data }] = useResetPasswordMutation();
 
   const router = useRouter();
+
+  if (!id || !token) {
+    return <Text mt={12} textAlign='center'>Wrong URL</Text>
+  }
+
   return (
     <Container maxW='md' mt='4rem'>
       <Formik
@@ -58,6 +63,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ id, token }) => {
                       </Alert>
                     )
                   }
+                  return;
                 })
                 :
                 null
@@ -81,11 +87,10 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ id, token }) => {
 export const getServerSideProps: GetServerSideProps = async ctx => {
   const { id, token } = ctx.query;
 
-
   return {
     props: {
-      id,
-      token
+      id: id ?? '',
+      token: token ?? ''
     },
   };
 }

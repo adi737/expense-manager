@@ -10,7 +10,7 @@ import {
   ObjectType,
   Ctx,
   Args,
-  ArgsType,
+  ArgsType
 } from "type-graphql";
 import { v4 } from 'uuid';
 import { User } from "../entities/User";
@@ -52,9 +52,6 @@ export class Errors {
 class UserResponse {
   @Field(() => [Errors], { nullable: true })
   errors?: Errors[];
-
-  @Field(() => String, { nullable: true })
-  serverError?: string;
 
   @Field(() => User, { nullable: true })
   user?: User;
@@ -129,9 +126,7 @@ export class UserResolver {
         return { errors }
       }
       console.error(error);
-      return {
-        serverError: 'server error'
-      }
+      throw new Error(error);
     }
   }
 
@@ -159,10 +154,10 @@ export class UserResolver {
 
       const to = user.email;
       const subject = "Activate your account";
-      const text = 'Link to account activation: ';
-      const link = `http://localhost:3000/activateAccount/${id}?token=${token}`;
+      const text = 'Link to account activation';
+      const link = `http://localhost:3000/activateAccount?id=${id}&token=${token}`;
 
-      redis.set(process.env.ACTIVATE_USER + token, id, 'ex', 60 * 60 * 24) // 24h
+      await redis.set(process.env.ACTIVATE_USER + token, id, 'ex', 60 * 60 * 24) // 24h
 
       await sendEmail(to, subject, text, link);
 
@@ -174,9 +169,7 @@ export class UserResolver {
         return { errors }
       }
       console.error(error);
-      return {
-        serverError: 'server error'
-      }
+      throw new Error(error);
     }
 
   }
@@ -211,12 +204,12 @@ export class UserResolver {
       const id: string = user.raw[0].id;
       const token = v4();
 
-      redis.set(process.env.ACTIVATE_USER + token, id, 'ex', 60 * 60 * 24) // 24h
+      await redis.set(process.env.ACTIVATE_USER + token, id, 'ex', 60 * 60 * 24) // 24h
 
       const to = user.raw[0].email;
       const subject = "Activate your account";
       const text = 'Click here to activate your account';
-      const link = `http://localhost:3000/activateAccount/${id}?token=${token}`;
+      const link = `http://localhost:3000/activateAccount?id=${id}&token=${token}`;
 
       await sendEmail(to, subject, text, link);
 
@@ -227,7 +220,7 @@ export class UserResolver {
         return { errors }
       }
       console.error(error.message);
-      return { serverError: 'server error' }
+      throw new Error(error);
     }
   }
 
@@ -259,7 +252,7 @@ export class UserResolver {
       }
 
       if (!user.isActive) {
-        setErrors({ field: 'user', message: 'User is inactive' });
+        setErrors({ field: 'user', message: 'User is inactive. Confirm your email.' });
         return { errors }
       }
 
@@ -268,7 +261,7 @@ export class UserResolver {
       return { user }
     } catch (error) {
       console.error(error.message)
-      return { serverError: 'server error' }
+      throw new Error(error);
     }
   }
 
@@ -277,11 +270,11 @@ export class UserResolver {
     @Ctx() { req, res }: MyContext
   ): Promise<boolean> {
     return new Promise((resolve) =>
-      req.session.destroy((err) => {
+      req.session.destroy(err => {
         if (err) {
           console.error(err);
           resolve(false);
-          return;
+          throw new Error(err);
         }
 
         res.clearCookie('id');
@@ -317,19 +310,19 @@ export class UserResolver {
 
       const token = v4();
 
-      redis.set(process.env.RESET_PASSWORD + token, user.id, 'ex', 60 * 60); //1h
+      await redis.set(process.env.RESET_PASSWORD + token, user.id, 'ex', 60 * 60); //1h
 
       const to = email;
       const subject = "Reset your password";
       const text = 'Click here to reset your password';
-      const link = `http://localhost:3000/resetPassword/${user.id}?token=${token}`;
+      const link = `http://localhost:3000/resetPassword?id=${user.id}&token=${token}`;
 
       await sendEmail(to, subject, text, link);
 
       return { user };
     } catch (error) {
       console.error(error);
-      return { serverError: 'server error' }
+      throw new Error(error);
     }
   }
 
@@ -381,8 +374,6 @@ export class UserResolver {
 
       const isValid = await redis.get(process.env.RESET_PASSWORD + token);
 
-      console.log(isValid)
-
       if (!isValid) {
         clearErrors();
         setErrors({ field: 'user', message: 'Link has expired' });
@@ -403,7 +394,7 @@ export class UserResolver {
         return { errors }
       }
       console.error(error);
-      return { serverError: 'server error' }
+      throw new Error(error)
     }
   }
 }

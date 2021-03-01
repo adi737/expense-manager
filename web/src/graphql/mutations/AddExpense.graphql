@@ -1,0 +1,5 @@
+mutation AddExpense($options: InputExpenseValues!) {
+  addExpense(options: $options) {
+    ...ExpenseResponseField
+  }
+}

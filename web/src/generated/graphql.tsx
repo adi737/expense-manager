@@ -19,12 +19,19 @@ export type Query = {
   __typename?: 'Query';
   user?: Maybe<User>;
   activateAccount: UserResponse;
+  expenses: ExpensesResponse;
 };
 
 
 export type QueryActivateAccountArgs = {
   id: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type QueryExpensesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
 };
 
 export type User = {
@@ -39,7 +46,6 @@ export type User = {
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<Errors>>;
-  serverError?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -47,6 +53,24 @@ export type Errors = {
   __typename?: 'Errors';
   field: Scalars['String'];
   message: Scalars['String'];
+};
+
+export type ExpensesResponse = {
+  __typename?: 'ExpensesResponse';
+  expenses?: Maybe<Array<Expense>>;
+  isMore?: Maybe<Scalars['Boolean']>;
+  auth?: Maybe<Scalars['String']>;
+};
+
+export type Expense = {
+  __typename?: 'Expense';
+  id: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  category: Scalars['String'];
+  product: Scalars['String'];
+  price: Scalars['Float'];
+  userId: Scalars['String'];
 };
 
 export type Mutation = {
@@ -57,6 +81,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   forgotPassword: UserResponse;
   resetPassword: UserResponse;
+  addExpense?: Maybe<ExpenseResponse>;
 };
 
 
@@ -86,6 +111,11 @@ export type MutationResetPasswordArgs = {
   options: InputPasswordValues;
 };
 
+
+export type MutationAddExpenseArgs = {
+  options: InputExpenseValues;
+};
+
 export type InputValues = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -96,9 +126,48 @@ export type InputPasswordValues = {
   repassword: Scalars['String'];
 };
 
+export type ExpenseResponse = {
+  __typename?: 'ExpenseResponse';
+  expense?: Maybe<Expense>;
+  errors?: Maybe<Array<Errors>>;
+  auth?: Maybe<Scalars['String']>;
+};
+
+export type InputExpenseValues = {
+  category: Scalars['String'];
+  product: Scalars['String'];
+  price: Scalars['Float'];
+};
+
 export type ErrorsFieldFragment = (
   { __typename?: 'Errors' }
   & Pick<Errors, 'field' | 'message'>
+);
+
+export type ExpenseFieldFragment = (
+  { __typename?: 'Expense' }
+  & Pick<Expense, 'id' | 'category' | 'product' | 'price'>
+);
+
+export type ExpenseResponseFieldFragment = (
+  { __typename?: 'ExpenseResponse' }
+  & Pick<ExpenseResponse, 'auth'>
+  & { expense?: Maybe<(
+    { __typename?: 'Expense' }
+    & ExpenseFieldFragment
+  )>, errors?: Maybe<Array<(
+    { __typename?: 'Errors' }
+    & ErrorsFieldFragment
+  )>> }
+);
+
+export type ExpensesResponseFieldFragment = (
+  { __typename?: 'ExpensesResponse' }
+  & Pick<ExpensesResponse, 'isMore' | 'auth'>
+  & { expenses?: Maybe<Array<(
+    { __typename?: 'Expense' }
+    & ExpenseFieldFragment
+  )>> }
 );
 
 export type UserFieldFragment = (
@@ -108,7 +177,6 @@ export type UserFieldFragment = (
 
 export type UserResponseFieldFragment = (
   { __typename?: 'UserResponse' }
-  & Pick<UserResponse, 'serverError'>
   & { user?: Maybe<(
     { __typename?: 'User' }
     & UserFieldFragment
@@ -116,6 +184,19 @@ export type UserResponseFieldFragment = (
     { __typename?: 'Errors' }
     & ErrorsFieldFragment
   )>> }
+);
+
+export type AddExpenseMutationVariables = Exact<{
+  options: InputExpenseValues;
+}>;
+
+
+export type AddExpenseMutation = (
+  { __typename?: 'Mutation' }
+  & { addExpense?: Maybe<(
+    { __typename?: 'ExpenseResponse' }
+    & ExpenseResponseFieldFragment
+  )> }
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -207,6 +288,20 @@ export type ActivateAccountQuery = (
   ) }
 );
 
+export type ExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  skip?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type ExpensesQuery = (
+  { __typename?: 'Query' }
+  & { expenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -218,16 +313,45 @@ export type UserQuery = (
   )> }
 );
 
-export const UserFieldFragmentDoc = gql`
-    fragment UserField on User {
+export const ExpenseFieldFragmentDoc = gql`
+    fragment ExpenseField on Expense {
   id
-  email
+  category
+  product
+  price
 }
     `;
 export const ErrorsFieldFragmentDoc = gql`
     fragment ErrorsField on Errors {
   field
   message
+}
+    `;
+export const ExpenseResponseFieldFragmentDoc = gql`
+    fragment ExpenseResponseField on ExpenseResponse {
+  expense {
+    ...ExpenseField
+  }
+  errors {
+    ...ErrorsField
+  }
+  auth
+}
+    ${ExpenseFieldFragmentDoc}
+${ErrorsFieldFragmentDoc}`;
+export const ExpensesResponseFieldFragmentDoc = gql`
+    fragment ExpensesResponseField on ExpensesResponse {
+  expenses {
+    ...ExpenseField
+  }
+  isMore
+  auth
+}
+    ${ExpenseFieldFragmentDoc}`;
+export const UserFieldFragmentDoc = gql`
+    fragment UserField on User {
+  id
+  email
 }
     `;
 export const UserResponseFieldFragmentDoc = gql`
@@ -238,10 +362,41 @@ export const UserResponseFieldFragmentDoc = gql`
   errors {
     ...ErrorsField
   }
-  serverError
 }
     ${UserFieldFragmentDoc}
 ${ErrorsFieldFragmentDoc}`;
+export const AddExpenseDocument = gql`
+    mutation AddExpense($options: InputExpenseValues!) {
+  addExpense(options: $options) {
+    ...ExpenseResponseField
+  }
+}
+    ${ExpenseResponseFieldFragmentDoc}`;
+export type AddExpenseMutationFn = Apollo.MutationFunction<AddExpenseMutation, AddExpenseMutationVariables>;
+
+/**
+ * __useAddExpenseMutation__
+ *
+ * To run a mutation, you first call `useAddExpenseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddExpenseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addExpenseMutation, { data, loading, error }] = useAddExpenseMutation({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useAddExpenseMutation(baseOptions?: Apollo.MutationHookOptions<AddExpenseMutation, AddExpenseMutationVariables>) {
+        return Apollo.useMutation<AddExpenseMutation, AddExpenseMutationVariables>(AddExpenseDocument, baseOptions);
+      }
+export type AddExpenseMutationHookResult = ReturnType<typeof useAddExpenseMutation>;
+export type AddExpenseMutationResult = Apollo.MutationResult<AddExpenseMutation>;
+export type AddExpenseMutationOptions = Apollo.BaseMutationOptions<AddExpenseMutation, AddExpenseMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email) {
@@ -467,6 +622,40 @@ export function useActivateAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type ActivateAccountQueryHookResult = ReturnType<typeof useActivateAccountQuery>;
 export type ActivateAccountLazyQueryHookResult = ReturnType<typeof useActivateAccountLazyQuery>;
 export type ActivateAccountQueryResult = Apollo.QueryResult<ActivateAccountQuery, ActivateAccountQueryVariables>;
+export const ExpensesDocument = gql`
+    query Expenses($limit: Int!, $skip: Int) {
+  expenses(limit: $limit, skip: $skip) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useExpensesQuery__
+ *
+ * To run a query within a React component, call `useExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useExpensesQuery(baseOptions: Apollo.QueryHookOptions<ExpensesQuery, ExpensesQueryVariables>) {
+        return Apollo.useQuery<ExpensesQuery, ExpensesQueryVariables>(ExpensesDocument, baseOptions);
+      }
+export function useExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpensesQuery, ExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<ExpensesQuery, ExpensesQueryVariables>(ExpensesDocument, baseOptions);
+        }
+export type ExpensesQueryHookResult = ReturnType<typeof useExpensesQuery>;
+export type ExpensesLazyQueryHookResult = ReturnType<typeof useExpensesLazyQuery>;
+export type ExpensesQueryResult = Apollo.QueryResult<ExpensesQuery, ExpensesQueryVariables>;
 export const UserDocument = gql`
     query User {
   user {

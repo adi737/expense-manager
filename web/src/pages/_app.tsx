@@ -1,29 +1,31 @@
 import { ChakraProvider } from '@chakra-ui/react'
+import NextNprogress from 'nextjs-progressbar';
 
 import theme from '../theme'
 import { AppProps } from 'next/app'
-import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
 import { DarkModeSwitch } from '../components/DarkModeSwitch';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/dist/client/router';
 
-const link = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
-  credentials: 'include'
-});
-
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache()
-});
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <ApolloProvider client={client}>
-      <ChakraProvider resetCSS theme={theme}>
-        <Component {...pageProps} />
-        <DarkModeSwitch />
-      </ChakraProvider>
-    </ApolloProvider>
-  )
+  const [pageLoading, setPageLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.events.on('routeChangeStart', () => setPageLoading(true));
+    router.events.on('routeChangeComplete', () => setPageLoading(false));
+    router.events.on('routeChangeError', () => setPageLoading(false));
+  }, [router]);
+
+  return pageLoading ?
+    <NextNprogress />
+    :
+    <ChakraProvider resetCSS theme={theme}>
+      <NextNprogress />
+      <Component {...pageProps} />
+      <DarkModeSwitch />
+    </ChakraProvider>
 }
 
 export default MyApp

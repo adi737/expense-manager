@@ -12,6 +12,8 @@ import connectRedis from 'connect-redis';
 import { __prod__ } from "./globals";
 import { User } from "./entities/User";
 import path from "path";
+import { Expense } from "./entities/Expense";
+import { ExpenseResolver } from "./resolvers/ExpenseResolver";
 
 
 const app = express();
@@ -47,7 +49,7 @@ app.use(
 
 const connectApolloServer = async () => {
     try {
-        await createConnection({
+        const connection = await createConnection({
             type: "postgres",
             host: 'localhost',
             port: 5432,
@@ -57,12 +59,14 @@ const connectApolloServer = async () => {
             synchronize: true,
             logging: true,
             migrations: [path.join(__dirname, "./migrations/*")],
-            entities: [User],
+            entities: [User, Expense],
         });
+
+        await connection.runMigrations();
 
         const apolloServer = new ApolloServer({
             schema: await buildSchema({
-                resolvers: [UserResolver]
+                resolvers: [UserResolver, ExpenseResolver]
             }),
             context: ({ req, res }) => ({ req, res, redis })
         });

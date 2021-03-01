@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 import InputField from "../components/InputField";
 import { useForgotPasswordMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
+import { withApollo } from "../utils/withApollo";
 
 interface ForgotPasswordProps {
 
@@ -22,12 +23,11 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ }) => {
           const { data } = await forgotPassword({ variables: { email: values.email } });
 
           if (data?.forgotPassword.errors) {
-            actions.setErrors(toErrorMap(data.forgotPassword.errors))
+            actions.setErrors(toErrorMap(data.forgotPassword.errors));
+            actions.setSubmitting(false);
           } else {
             router.push('/successMessage');
           }
-
-          actions.setSubmitting(false)
         }}
       >
         {({ isSubmitting }) => (
@@ -47,7 +47,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ }) => {
               type="submit"
             >
               Submit
-          </Button>
+            </Button>
           </Form>
         )}
       </Formik>
@@ -55,4 +55,4 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ }) => {
   );
 }
 
-export default ForgotPassword;
+export default withApollo({ ssr: false })(ForgotPassword);

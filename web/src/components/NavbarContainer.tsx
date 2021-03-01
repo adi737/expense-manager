@@ -11,9 +11,10 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({ children }) => {
       as="nav"
       wrap="wrap"
       w="100%"
-      mb={4}
-      p={8}
-      bg={["teal.500", "teal.500", "transparent", "transparent"]}
+      p={4}
+      bg="teal.500"
+      position="sticky"
+      top={0}
     >
       {children}
     </Flex>

@@ -1,31 +1,26 @@
-import { Alert, AlertIcon, Box, Button, Container, Link } from "@chakra-ui/react";
+import { Alert, AlertIcon, Button, Container, Link, Stack } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/dist/client/router";
 import NextLink from 'next/link';
 
-import InputField from "../components/InputField";
-import { useLoginMutation, UserDocument } from "../generated/graphql";
+import InputField from "./InputField";
+import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
+import { useApolloClient } from "@apollo/client";
 
 interface LoginProps {
 
 }
 
-const Login: React.FC<LoginProps> = ({ }) => {
-  const [login, { data }] = useLoginMutation({
-    update(cache, { data }) {
-      cache.writeQuery({
-        query: UserDocument,
-        data: {
-          user: data?.login.user
-        }
-      })
-    }
-  });
+const Login: React.FC<LoginProps> = () => {
+  const [login, { data }] = useLoginMutation();
 
   const router = useRouter();
+
+  const { resetStore } = useApolloClient();
+
   return (
-    <Container maxW='3xl' mt='4rem'>
+    <Container mt='4rem'>
       <Formik
         initialValues={{ email: "", password: '' }}
         onSubmit={async (values, actions) => {
@@ -33,11 +28,13 @@ const Login: React.FC<LoginProps> = ({ }) => {
 
           if (data?.login.errors) {
             actions.setErrors(toErrorMap(data.login.errors))
+            actions.setSubmitting(false)
+          } else if (typeof router.query.next === 'string') {
+            // pending
+            router.push(router.query.next);
           } else {
-            router.push('/');
+            await resetStore();
           }
-
-          actions.setSubmitting(false)
         }}
       >
         {({ isSubmitting }) => (
@@ -56,13 +53,18 @@ const Login: React.FC<LoginProps> = ({ }) => {
               label="Password"
               submitting={isSubmitting}
             />
-            <Box>
+            <Stack>
+              <NextLink href='/register' passHref>
+                <Link color="teal.500">
+                  Don't have an account?
+                </Link>
+              </NextLink>
               <NextLink href='/forgotPassword' passHref>
                 <Link color="teal.500">
                   Forgot password?
                 </Link>
               </NextLink>
-            </Box>
+            </Stack>
             {
               data?.login.errors ?
                 data?.login.errors.map(error => {
@@ -74,6 +76,7 @@ const Login: React.FC<LoginProps> = ({ }) => {
                       </Alert>
                     )
                   }
+                  return;
                 })
                 :
                 null
@@ -84,7 +87,7 @@ const Login: React.FC<LoginProps> = ({ }) => {
               isLoading={isSubmitting}
               type="submit"
             >
-              Submit
+              Login
           </Button>
           </Form>
         )}

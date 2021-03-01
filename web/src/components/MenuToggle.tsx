@@ -12,14 +12,14 @@ const MenuToggle: React.FC<MenuToggleProps> = ({ toggle, isOpen }) => {
     <Box display={{ base: "block", md: "none" }} onClick={toggle}>
       {
         isOpen ?
-          <CloseButton size='lg' />
+          <CloseButton size='md' />
           :
           <Menu>
             <MenuButton
               as={IconButton}
               aria-label="Options"
               icon={<HamburgerIcon />}
-              size="lg"
+              size="sm"
               variant="outline"
             />
           </Menu>

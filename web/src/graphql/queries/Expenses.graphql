@@ -1,0 +1,5 @@
+query Expenses($limit: Int!, $skip: Int) {
+  expenses(limit: $limit, skip: $skip) {
+    ...ExpensesResponseField
+  }
+}
