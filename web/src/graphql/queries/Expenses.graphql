@@ -1,5 +1,5 @@
-query Expenses($limit: Int!, $skip: Int) {
-  expenses(limit: $limit, skip: $skip) {
+query Expenses($limit: Int!, $offset: Int) {
+  expenses(limit: $limit, offset: $offset) {
     ...ExpensesResponseField
   }
 }

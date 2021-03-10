@@ -5,7 +5,7 @@ import { useSendActivationLinkMutation } from "../generated/graphql";
 
 interface ExpiredLinkProps {
   id: string;
-  message: string
+  message: string;
 }
 
 const ExpiredLink: React.FC<ExpiredLinkProps> = ({ id, message }) => {
@@ -18,46 +18,37 @@ const ExpiredLink: React.FC<ExpiredLinkProps> = ({ id, message }) => {
     const { data } = await sendActivationLink({ variables: { id } });
 
     if (data?.sendActivationLink.errors) {
-      return setError('Activation link could not be sent')
+      return setError("Activation link could not be sent");
     }
-    router.push('/successMessage');
-  }
+    router.push("/successMessage");
+  };
   return (
     <>
-      <Text
-        textAlign='center'
-        mt={12}
-      >
+      <Text textAlign="center" mt={12}>
         {message}
       </Text>
-      {
-        loading ?
-          <Text textAlign='center'>loading...</Text>
-          :
-          <>
-            <Link
-              textDecor='underline'
-              textAlign='center'
-              fontWeight='medium'
-              as='p'
-              onClick={handleOnClick}>
-              Click here to send it again
-            </Link>
-            {
-              error ?
-                <Text
-                  textAlign='center'
-                  color='red.500'
-                >
-                  {error}
-                </Text>
-                :
-                null
-            }
-          </>
-      }
+      {loading ? (
+        <Text textAlign="center">loading...</Text>
+      ) : (
+        <>
+          <Link
+            textDecor="underline"
+            textAlign="center"
+            fontWeight="medium"
+            as="p"
+            onClick={handleOnClick}
+          >
+            Click here to send it again
+          </Link>
+          {error ? (
+            <Text textAlign="center" color="red.500">
+              {error}
+            </Text>
+          ) : null}
+        </>
+      )}
     </>
   );
-}
+};
 
 export default ExpiredLink;

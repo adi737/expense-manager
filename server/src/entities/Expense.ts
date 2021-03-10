@@ -1,9 +1,17 @@
 import { Field, Float, Int, ObjectType } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from "typeorm";
 import { User } from "./User";
 
 @ObjectType()
-@Entity('expenses')
+@Entity("expenses")
 export class Expense extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
@@ -26,13 +34,13 @@ export class Expense extends BaseEntity {
   product!: string;
 
   @Field(() => Float)
-  @Column('float')
+  @Column("float")
   price!: number;
 
   @Field(() => String)
   @Column()
   userId!: string;
 
-  @ManyToOne(() => User, user => user.expenses)
+  @ManyToOne(() => User, (user) => user.expenses)
   user!: User;
 }

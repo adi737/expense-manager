@@ -22,8 +22,9 @@ type ContextWithApolloOptions = AppContext & {
 } & NextPageContext &
   WithApolloOptions;
 
-type ApolloClientParam = ApolloClient<NormalizedCacheObject>
-  | ((ctx?: NextPageContext) => ApolloClient<NormalizedCacheObject>)
+type ApolloClientParam =
+  | ApolloClient<NormalizedCacheObject>
+  | ((ctx?: NextPageContext) => ApolloClient<NormalizedCacheObject>);
 
 /**
  * Installs the Apollo Client on NextPageContext
@@ -35,7 +36,10 @@ export const initOnContext = (
   acp: ApolloClientParam,
   ctx: ContextWithApolloOptions
 ) => {
-  const ac = typeof acp === 'function' ? acp(ctx) : acp as ApolloClient<NormalizedCacheObject>;
+  const ac =
+    typeof acp === "function"
+      ? acp(ctx)
+      : (acp as ApolloClient<NormalizedCacheObject>);
   const inAppContext = Boolean(ctx.ctx);
 
   // We consider installing `withApollo({ ssr: true })` on global App level
@@ -44,7 +48,7 @@ export const initOnContext = (
     if (inAppContext) {
       console.warn(
         "Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n" +
-        "Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n"
+          "Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n"
       );
     }
   }
@@ -59,7 +63,7 @@ export const initOnContext = (
   // time without the context. Once that happens, the following code will make sure we send
   // the prop as `null` to the browser.
   (apolloClient as ApolloClient<NormalizedCacheObject> & {
-    toJSON: () => { [key: string]: any } | null;
+    toJSON: () => { [key: string]: unknown } | null;
   }).toJSON = () => null;
 
   // Add apolloClient to NextPageContext & NextAppContext.
@@ -84,7 +88,10 @@ const initApolloClient = (
   initialState: NormalizedCacheObject,
   ctx: NextPageContext | undefined
 ) => {
-  const apolloClient = (ctx: NextPageContext | undefined) => typeof acp === 'function' ? acp(ctx) : acp as ApolloClient<NormalizedCacheObject>;
+  const apolloClient = (ctx: NextPageContext | undefined) =>
+    typeof acp === "function"
+      ? acp(ctx)
+      : (acp as ApolloClient<NormalizedCacheObject>);
 
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
@@ -94,7 +101,11 @@ const initApolloClient = (
 
   // Reuse client on the client-side
   if (!globalApolloClient) {
-    globalApolloClient = createApolloClient(apolloClient(ctx), initialState, ctx);
+    globalApolloClient = createApolloClient(
+      apolloClient(ctx),
+      initialState,
+      ctx
+    );
   }
 
   return globalApolloClient;
@@ -182,6 +193,7 @@ export const createWithApollo = <P, IP>(ac: ApolloClientParam) => {
 
               // TypeScript fails this check for some reason.
               // <AppInitialProps & {[name: string]: any;}> should be alright.
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               await getDataFromTree(<AppTree {...props} />);
             } catch (error) {
@@ -217,7 +229,10 @@ const createApolloClient = (
   initialState: NormalizedCacheObject,
   ctx: NextPageContext | undefined
 ) => {
-  const apolloClient = typeof acp === 'function' ? acp(ctx) : acp as ApolloClient<NormalizedCacheObject>;
+  const apolloClient =
+    typeof acp === "function"
+      ? acp(ctx)
+      : (acp as ApolloClient<NormalizedCacheObject>);
   // The `ctx` (NextPageContext) will only be present on the server.
   // use it to extract auth headers (ctx.req) or similar.
   (apolloClient as ApolloClient<NormalizedCacheObject> & {

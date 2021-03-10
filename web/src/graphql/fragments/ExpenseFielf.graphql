@@ -3,4 +3,5 @@ fragment ExpenseField on Expense {
   category
   product
   price
+  createdAt
 }

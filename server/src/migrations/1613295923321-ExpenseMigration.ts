@@ -1,9 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class ExpenseMigration1613295923321 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             insert into expenses (category, product, price, "userId") values ('Finance', 'Wine - Vineland Estate Semi - Dry', 28.23, 'f6356716-cd6d-44bf-a477-61a2b6adfb12');
             insert into expenses (category, product, price, "userId") values ('Finance', 'Pear - Halves', 84, 'f6356716-cd6d-44bf-a477-61a2b6adfb12');
             insert into expenses (category, product, price, "userId") values ('Energy', 'V8 - Tropical Blend', 21, 'f6356716-cd6d-44bf-a477-61a2b6adfb12');
@@ -104,10 +103,10 @@ export class ExpenseMigration1613295923321 implements MigrationInterface {
             insert into expenses (category, product, price, "userId") values ('Consumer Services', 'Lamb - Racks, Frenched', 4, 'f6356716-cd6d-44bf-a477-61a2b6adfb12');
             insert into expenses (category, product, price, "userId") values ('n/a', 'Ham - Cooked', 11, 'f6356716-cd6d-44bf-a477-61a2b6adfb12');
             insert into expenses (category, product, price, "userId") values ('n/a', 'Sobe - Lizard Fuel', 16, 'f6356716-cd6d-44bf-a477-61a2b6adfb12');
-        `)
-    }
+        `);
+  }
 
-    public async down(_: QueryRunner): Promise<void> {
-    }
-
+  public async down(_: QueryRunner): Promise<void> {
+    _;
+  }
 }

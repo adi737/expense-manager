@@ -1,14 +1,19 @@
 import nodemailer from "nodemailer";
 
 // async..await is not allowed in global scope, must use a wrapper
-export const sendEmail = async (to: string, subject: string, text: string, link: string) => {
+export const sendEmail = async (
+  to: string,
+  subject: string,
+  text: string,
+  link: string
+): Promise<void> => {
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
 
   // create reusable transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    host: 'smtp.gmail.com',
+    service: "Gmail",
+    host: "smtp.gmail.com",
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
@@ -24,4 +29,4 @@ export const sendEmail = async (to: string, subject: string, text: string, link:
     subject, // Subject line
     html: `<a href=${link}>${text}</a>`, // html body
   });
-}
+};

@@ -1,8 +1,9 @@
 import { Box, Stack } from "@chakra-ui/react";
+import { ReactNode } from "react";
 
 interface MenuLinksProps {
   isOpen: boolean;
-  body: any;
+  body: ReactNode;
 }
 
 const MenuLinks: React.FC<MenuLinksProps> = ({ isOpen, body }) => {
@@ -20,8 +21,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ isOpen, body }) => {
         {body}
       </Stack>
     </Box>
-
   );
-}
+};
 
 export default MenuLinks;

@@ -1,46 +1,50 @@
-import { Container, Button } from "@chakra-ui/react";
+import { Container, Button, Link } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/dist/client/router";
+import React from "react";
+import NextLink from "next/link";
 import InputField from "../components/InputField";
 import { useForgotPasswordMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { withApollo } from "../utils/withApollo";
 
-interface ForgotPasswordProps {
+// interface ForgotPasswordProps {}
 
-}
-
-const ForgotPassword: React.FC<ForgotPasswordProps> = ({ }) => {
+const ForgotPassword: React.FC = () => {
   const [forgotPassword] = useForgotPasswordMutation();
 
   const router = useRouter();
 
   return (
-    <Container maxW='md' mt='4rem'>
+    <Container maxW="sm" mt="4rem">
       <Formik
         initialValues={{ email: "" }}
         onSubmit={async (values, actions) => {
-          const { data } = await forgotPassword({ variables: { email: values.email } });
+          const { data } = await forgotPassword({
+            variables: { email: values.email },
+          });
 
           if (data?.forgotPassword.errors) {
             actions.setErrors(toErrorMap(data.forgotPassword.errors));
-            actions.setSubmitting(false);
           } else {
-            router.push('/successMessage');
+            router.push("/successMessage");
           }
         }}
       >
         {({ isSubmitting }) => (
           <Form>
             <InputField
-              type='email'
+              type="email"
               name="email"
               placeholder="email"
               label="Email"
               submitting={isSubmitting}
             />
+            <NextLink href="/" passHref>
+              <Link color="teal.500">Go to homepage</Link>
+            </NextLink>
             <Button
-              width='100%'
+              width="100%"
               mt={4}
               colorScheme="teal"
               isLoading={isSubmitting}
@@ -53,6 +57,6 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ }) => {
       </Formik>
     </Container>
   );
-}
+};
 
 export default withApollo({ ssr: false })(ForgotPassword);

@@ -1,19 +1,25 @@
-import React from "react";
-import Navigation from "./Navigation";
 import { Box } from "@chakra-ui/react";
-import { ExpensesQuery } from "../generated/graphql";
 
-interface LayoutProps {
-  data?: ExpensesQuery;
-  dataLoading: boolean;
-}
+import Navigation from "./Navigation";
 
+// interface LayoutProps {}
 
-export const Layout: React.FC<LayoutProps> = ({ children, data, dataLoading }) => {
+export const Layout: React.FC = ({ children }) => {
   return (
     <>
-      <Navigation data={data} dataLoading={dataLoading} />
-      <Box mx='auto' w='100%' maxW={{ sm: '600px', md: '700px', lg: '800px', xl: '900px', '2xl': '1000px' }} p={[2, 3, 4, 5, 6]}>
+      <Navigation />
+      <Box
+        mx="auto"
+        w="100%"
+        maxW={{
+          sm: "600px",
+          md: "700px",
+          lg: "800px",
+          xl: "900px",
+          "2xl": "1000px",
+        }}
+        p={[2, 3, 4, 5, 6]}
+      >
         {children}
       </Box>
     </>

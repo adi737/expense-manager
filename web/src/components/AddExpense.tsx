@@ -1,36 +1,46 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/dist/client/router";
-import { ExpensesDocument, ExpensesQuery, useAddExpenseMutation } from "../generated/graphql";
+import {
+  ExpenseFieldFragmentDoc,
+  ExpensesResponse,
+  useAddExpenseMutation,
+} from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import InputField from "./InputField";
 
-interface AddExpenseProps {
-
-}
-
-const AddExpense: React.FC<AddExpenseProps> = ({ }) => {
-  const [addExpense, { error, data }] = useAddExpenseMutation({
+const AddExpense: React.FC = () => {
+  const [addExpense, { error }] = useAddExpenseMutation({
     update(cache, { data }) {
-      const expData: ExpensesQuery | null = cache.readQuery({
-        query: ExpensesDocument,
-        variables: {
-          limit: 20
-        }
-      });
+      cache.modify({
+        fields: {
+          expenses(existingExpensesRefs: ExpensesResponse) {
+            const newExpenseRef = cache.writeFragment({
+              data: data?.addExpense?.expense,
+              fragment: ExpenseFieldFragmentDoc,
+            });
 
-      const expenses = expData?.expenses ?? [];
-
-      cache.writeQuery({
-        query: ExpensesDocument,
-        variables: {
-          limit: 20
+            return {
+              ...existingExpensesRefs,
+              expenses: [
+                newExpenseRef,
+                ...(existingExpensesRefs.expenses ?? []),
+              ],
+            };
+          },
         },
-        data: {
-          expenses: [...expenses, data?.addExpense?.expense]
-        }
-      })
-    }
+      });
+    },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -38,26 +48,26 @@ const AddExpense: React.FC<AddExpenseProps> = ({ }) => {
 
   return (
     <>
-      <Button position='static' onClick={onOpen}>Add expense</Button>
+      <Button mb={6} position="static" onClick={onOpen}>
+        Add expense
+      </Button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <Formik
-            initialValues={{ category: "", product: '', price: 0 }}
+            initialValues={{ category: "", product: "", price: 0 }}
             onSubmit={async (values, actions) => {
-              const { data } = await addExpense({ variables: { options: values } });
+              const { data } = await addExpense({
+                variables: { options: values },
+              });
 
-              if (error?.message.includes('not authenticated')) {
-                router.push('/login');
+              if (error?.message.includes("not authenticated")) {
+                router.push("/login");
               } else if (data?.addExpense?.errors) {
-                actions.setErrors(toErrorMap(data.addExpense.errors))
+                actions.setErrors(toErrorMap(data.addExpense.errors));
               } else {
                 onClose();
-                actions.setSubmitting(false)
               }
             }}
           >
@@ -67,31 +77,36 @@ const AddExpense: React.FC<AddExpenseProps> = ({ }) => {
                 <ModalCloseButton />
                 <ModalBody pb={6}>
                   <InputField
-                    type='text'
-                    name='category'
-                    label='Category'
-                    placeholder='Select category'
+                    type="text"
+                    name="category"
+                    label="Category"
+                    placeholder="Select category"
                     submitting={isSubmitting}
-                    option='select'
+                    option="select"
                   />
                   <InputField
-                    type='text'
-                    name='product'
-                    label='Product'
-                    placeholder='product'
+                    type="text"
+                    name="product"
+                    label="Product"
+                    placeholder="product"
                     submitting={isSubmitting}
                   />
                   <InputField
-                    type='number'
-                    name='price'
-                    label='Price'
-                    placeholder='price'
+                    type="number"
+                    name="price"
+                    label="Price"
+                    placeholder="price"
                     submitting={isSubmitting}
                   />
                 </ModalBody>
 
                 <ModalFooter>
-                  <Button colorScheme="blue" mr={3} isLoading={isSubmitting} type="submit">
+                  <Button
+                    colorScheme="blue"
+                    mr={3}
+                    isLoading={isSubmitting}
+                    type="submit"
+                  >
                     Save
                   </Button>
                   <Button onClick={onClose}>Cancel</Button>
@@ -103,6 +118,6 @@ const AddExpense: React.FC<AddExpenseProps> = ({ }) => {
       </Modal>
     </>
   );
-}
+};
 
 export default AddExpense;

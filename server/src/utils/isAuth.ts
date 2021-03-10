@@ -5,8 +5,8 @@ export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const { req } = context;
 
   if (!req.session.userId) {
-    return { auth: 'not authenticated' }
+    return { auth: "not authenticated" };
   }
 
   return next();
-} 
+};

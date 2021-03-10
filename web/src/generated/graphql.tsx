@@ -30,7 +30,7 @@ export type QueryActivateAccountArgs = {
 
 
 export type QueryExpensesArgs = {
-  skip?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
 };
 
@@ -146,7 +146,7 @@ export type ErrorsFieldFragment = (
 
 export type ExpenseFieldFragment = (
   { __typename?: 'Expense' }
-  & Pick<Expense, 'id' | 'category' | 'product' | 'price'>
+  & Pick<Expense, 'id' | 'category' | 'product' | 'price' | 'createdAt'>
 );
 
 export type ExpenseResponseFieldFragment = (
@@ -290,7 +290,7 @@ export type ActivateAccountQuery = (
 
 export type ExpensesQueryVariables = Exact<{
   limit: Scalars['Int'];
-  skip?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -319,6 +319,7 @@ export const ExpenseFieldFragmentDoc = gql`
   category
   product
   price
+  createdAt
 }
     `;
 export const ErrorsFieldFragmentDoc = gql`
@@ -623,8 +624,8 @@ export type ActivateAccountQueryHookResult = ReturnType<typeof useActivateAccoun
 export type ActivateAccountLazyQueryHookResult = ReturnType<typeof useActivateAccountLazyQuery>;
 export type ActivateAccountQueryResult = Apollo.QueryResult<ActivateAccountQuery, ActivateAccountQueryVariables>;
 export const ExpensesDocument = gql`
-    query Expenses($limit: Int!, $skip: Int) {
-  expenses(limit: $limit, skip: $skip) {
+    query Expenses($limit: Int!, $offset: Int) {
+  expenses(limit: $limit, offset: $offset) {
     ...ExpensesResponseField
   }
 }
@@ -643,7 +644,7 @@ export const ExpensesDocument = gql`
  * const { data, loading, error } = useExpensesQuery({
  *   variables: {
  *      limit: // value for 'limit'
- *      skip: // value for 'skip'
+ *      offset: // value for 'offset'
  *   },
  * });
  */

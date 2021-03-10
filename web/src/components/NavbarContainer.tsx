@@ -1,11 +1,9 @@
 import { Flex } from "@chakra-ui/react";
 import React from "react";
 
-interface NavbarContainerProps {
+// interface NavbarContainerProps {}
 
-}
-
-const NavbarContainer: React.FC<NavbarContainerProps> = ({ children }) => {
+const NavbarContainer: React.FC = ({ children }) => {
   return (
     <Flex
       as="nav"
@@ -19,6 +17,6 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({ children }) => {
       {children}
     </Flex>
   );
-}
+};
 
 export default NavbarContainer;
