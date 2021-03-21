@@ -8,9 +8,11 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Box,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/dist/client/router";
+import React from "react";
 import {
   ExpenseFieldFragmentDoc,
   ExpensesResponse,
@@ -22,36 +24,49 @@ import InputField from "./InputField";
 const AddExpense: React.FC = () => {
   const [addExpense, { error }] = useAddExpenseMutation({
     update(cache, { data }) {
-      cache.modify({
-        fields: {
-          expenses(existingExpensesRefs: ExpensesResponse) {
-            const newExpenseRef = cache.writeFragment({
-              data: data?.addExpense?.expense,
-              fragment: ExpenseFieldFragmentDoc,
-            });
+      if (!data?.addExpense?.errors) {
+        cache.modify({
+          fields: {
+            expenses(existingExpensesRefs: ExpensesResponse) {
+              const newExpenseRef = cache.writeFragment({
+                data: data?.addExpense?.expense,
+                fragment: ExpenseFieldFragmentDoc,
+              });
 
-            return {
-              ...existingExpensesRefs,
-              expenses: [
-                newExpenseRef,
-                ...(existingExpensesRefs.expenses ?? []),
-              ],
-            };
+              return {
+                ...existingExpensesRefs,
+                expenses: [
+                  newExpenseRef,
+                  ...(existingExpensesRefs.expenses ?? []),
+                ],
+              };
+            },
           },
-        },
-      });
+        });
+      }
     },
   });
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
 
   return (
-    <>
-      <Button mb={6} position="static" onClick={onOpen}>
+    <Box textAlign="center">
+      <Button
+        mt="3rem"
+        mb="1rem"
+        onClick={onOpen}
+        position="static"
+        _hover={{
+          transform: "scale(1.1)",
+        }}
+        transition=".4s"
+        variant="outline"
+        bgColor={{ sm: "teal.400" }}
+      >
         Add expense
       </Button>
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -61,7 +76,6 @@ const AddExpense: React.FC = () => {
               const { data } = await addExpense({
                 variables: { options: values },
               });
-
               if (error?.message.includes("not authenticated")) {
                 router.push("/login");
               } else if (data?.addExpense?.errors) {
@@ -116,7 +130,7 @@ const AddExpense: React.FC = () => {
           </Formik>
         </ModalContent>
       </Modal>
-    </>
+    </Box>
   );
 };
 

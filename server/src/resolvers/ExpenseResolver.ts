@@ -67,27 +67,32 @@ export class ExpenseResolver {
     let isMore: boolean;
     let expenses: Expense[];
 
-    if (!offset) {
-      expenses = await Expense.find({
-        where: { userId: req.session.userId },
-        order: { createdAt: "DESC" },
-        take: realLimitPlusOne,
-      });
-    } else {
-      expenses = await Expense.find({
-        where: { userId: req.session.userId },
-        order: { createdAt: "DESC" },
-        skip: offset,
-        take: realLimitPlusOne,
-      });
+    try {
+      if (!offset) {
+        expenses = await Expense.find({
+          where: { userId: req.session.userId },
+          order: { createdAt: "DESC" },
+          take: realLimitPlusOne,
+        });
+      } else {
+        expenses = await Expense.find({
+          where: { userId: req.session.userId },
+          order: { createdAt: "DESC" },
+          skip: offset,
+          take: realLimitPlusOne,
+        });
+      }
+
+      expenses.length === realLimitPlusOne ? (isMore = true) : (isMore = false);
+
+      return {
+        expenses: expenses.slice(0, realLimit),
+        isMore,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
     }
-
-    expenses.length === realLimitPlusOne ? (isMore = true) : (isMore = false);
-
-    return {
-      expenses: expenses.slice(0, realLimit),
-      isMore,
-    };
   }
 
   @Mutation(() => ExpenseResponse, { nullable: true })
@@ -104,12 +109,40 @@ export class ExpenseResolver {
       return { errors };
     }
 
-    const expense = await Expense.create({
-      ...options,
-      price,
-      userId: req.session.userId,
-    }).save();
+    try {
+      const expense = await Expense.create({
+        ...options,
+        price,
+        userId: req.session.userId,
+      }).save();
 
-    return { expense };
+      return { expense };
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async deleteExpense(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    try {
+      const deleteResult = await Expense.delete({
+        userId: req.session.userId,
+        id,
+      });
+
+      if (!deleteResult.affected) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
   }
 }

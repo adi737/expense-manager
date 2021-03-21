@@ -82,6 +82,7 @@ export type Mutation = {
   forgotPassword: UserResponse;
   resetPassword: UserResponse;
   addExpense?: Maybe<ExpenseResponse>;
+  deleteExpense: Scalars['Boolean'];
 };
 
 
@@ -114,6 +115,11 @@ export type MutationResetPasswordArgs = {
 
 export type MutationAddExpenseArgs = {
   options: InputExpenseValues;
+};
+
+
+export type MutationDeleteExpenseArgs = {
+  id: Scalars['Int'];
 };
 
 export type InputValues = {
@@ -197,6 +203,16 @@ export type AddExpenseMutation = (
     { __typename?: 'ExpenseResponse' }
     & ExpenseResponseFieldFragment
   )> }
+);
+
+export type DeleteExpenseMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteExpenseMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteExpense'>
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -398,6 +414,36 @@ export function useAddExpenseMutation(baseOptions?: Apollo.MutationHookOptions<A
 export type AddExpenseMutationHookResult = ReturnType<typeof useAddExpenseMutation>;
 export type AddExpenseMutationResult = Apollo.MutationResult<AddExpenseMutation>;
 export type AddExpenseMutationOptions = Apollo.BaseMutationOptions<AddExpenseMutation, AddExpenseMutationVariables>;
+export const DeleteExpenseDocument = gql`
+    mutation DeleteExpense($id: Int!) {
+  deleteExpense(id: $id)
+}
+    `;
+export type DeleteExpenseMutationFn = Apollo.MutationFunction<DeleteExpenseMutation, DeleteExpenseMutationVariables>;
+
+/**
+ * __useDeleteExpenseMutation__
+ *
+ * To run a mutation, you first call `useDeleteExpenseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteExpenseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteExpenseMutation, { data, loading, error }] = useDeleteExpenseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteExpenseMutation(baseOptions?: Apollo.MutationHookOptions<DeleteExpenseMutation, DeleteExpenseMutationVariables>) {
+        return Apollo.useMutation<DeleteExpenseMutation, DeleteExpenseMutationVariables>(DeleteExpenseDocument, baseOptions);
+      }
+export type DeleteExpenseMutationHookResult = ReturnType<typeof useDeleteExpenseMutation>;
+export type DeleteExpenseMutationResult = Apollo.MutationResult<DeleteExpenseMutation>;
+export type DeleteExpenseMutationOptions = Apollo.BaseMutationOptions<DeleteExpenseMutation, DeleteExpenseMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email) {
