@@ -20,6 +20,17 @@ export type Query = {
   user?: Maybe<User>;
   activateAccount: UserResponse;
   expenses: ExpensesResponse;
+  groceriesExpenses: ExpensesResponse;
+  medicalExpenses: ExpensesResponse;
+  houseExpenses: ExpensesResponse;
+  transportExpenses: ExpensesResponse;
+  taxesExpenses: ExpensesResponse;
+  entertainmentExpenses: ExpensesResponse;
+  installmentsExpenses: ExpensesResponse;
+  personalExpenses: ExpensesResponse;
+  educationExpenses: ExpensesResponse;
+  giftsExpenses: ExpensesResponse;
+  otherExpenses: ExpensesResponse;
 };
 
 
@@ -30,6 +41,72 @@ export type QueryActivateAccountArgs = {
 
 
 export type QueryExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryGroceriesExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryMedicalExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryHouseExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryTransportExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryTaxesExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryEntertainmentExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryInstallmentsExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryPersonalExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryEducationExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryGiftsExpensesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryOtherExpensesArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
 };
@@ -304,6 +381,34 @@ export type ActivateAccountQuery = (
   ) }
 );
 
+export type EducationExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type EducationExpensesQuery = (
+  { __typename?: 'Query' }
+  & { educationExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type EntertainmentExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type EntertainmentExpensesQuery = (
+  { __typename?: 'Query' }
+  & { entertainmentExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
 export type ExpensesQueryVariables = Exact<{
   limit: Scalars['Int'];
   offset?: Maybe<Scalars['Int']>;
@@ -313,6 +418,132 @@ export type ExpensesQueryVariables = Exact<{
 export type ExpensesQuery = (
   { __typename?: 'Query' }
   & { expenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type GiftsExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GiftsExpensesQuery = (
+  { __typename?: 'Query' }
+  & { giftsExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type GroceriesExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GroceriesExpensesQuery = (
+  { __typename?: 'Query' }
+  & { groceriesExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type HouseExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type HouseExpensesQuery = (
+  { __typename?: 'Query' }
+  & { houseExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type InstallmentsExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type InstallmentsExpensesQuery = (
+  { __typename?: 'Query' }
+  & { installmentsExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type MedicalExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type MedicalExpensesQuery = (
+  { __typename?: 'Query' }
+  & { medicalExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type OtherExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type OtherExpensesQuery = (
+  { __typename?: 'Query' }
+  & { otherExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type PersonalExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type PersonalExpensesQuery = (
+  { __typename?: 'Query' }
+  & { personalExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type TaxesExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type TaxesExpensesQuery = (
+  { __typename?: 'Query' }
+  & { taxesExpenses: (
+    { __typename?: 'ExpensesResponse' }
+    & ExpensesResponseFieldFragment
+  ) }
+);
+
+export type TransportExpensesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type TransportExpensesQuery = (
+  { __typename?: 'Query' }
+  & { transportExpenses: (
     { __typename?: 'ExpensesResponse' }
     & ExpensesResponseFieldFragment
   ) }
@@ -669,6 +900,74 @@ export function useActivateAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type ActivateAccountQueryHookResult = ReturnType<typeof useActivateAccountQuery>;
 export type ActivateAccountLazyQueryHookResult = ReturnType<typeof useActivateAccountLazyQuery>;
 export type ActivateAccountQueryResult = Apollo.QueryResult<ActivateAccountQuery, ActivateAccountQueryVariables>;
+export const EducationExpensesDocument = gql`
+    query EducationExpenses($limit: Int!, $offset: Int) {
+  educationExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useEducationExpensesQuery__
+ *
+ * To run a query within a React component, call `useEducationExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEducationExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEducationExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useEducationExpensesQuery(baseOptions: Apollo.QueryHookOptions<EducationExpensesQuery, EducationExpensesQueryVariables>) {
+        return Apollo.useQuery<EducationExpensesQuery, EducationExpensesQueryVariables>(EducationExpensesDocument, baseOptions);
+      }
+export function useEducationExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EducationExpensesQuery, EducationExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<EducationExpensesQuery, EducationExpensesQueryVariables>(EducationExpensesDocument, baseOptions);
+        }
+export type EducationExpensesQueryHookResult = ReturnType<typeof useEducationExpensesQuery>;
+export type EducationExpensesLazyQueryHookResult = ReturnType<typeof useEducationExpensesLazyQuery>;
+export type EducationExpensesQueryResult = Apollo.QueryResult<EducationExpensesQuery, EducationExpensesQueryVariables>;
+export const EntertainmentExpensesDocument = gql`
+    query EntertainmentExpenses($limit: Int!, $offset: Int) {
+  entertainmentExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useEntertainmentExpensesQuery__
+ *
+ * To run a query within a React component, call `useEntertainmentExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEntertainmentExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEntertainmentExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useEntertainmentExpensesQuery(baseOptions: Apollo.QueryHookOptions<EntertainmentExpensesQuery, EntertainmentExpensesQueryVariables>) {
+        return Apollo.useQuery<EntertainmentExpensesQuery, EntertainmentExpensesQueryVariables>(EntertainmentExpensesDocument, baseOptions);
+      }
+export function useEntertainmentExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EntertainmentExpensesQuery, EntertainmentExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<EntertainmentExpensesQuery, EntertainmentExpensesQueryVariables>(EntertainmentExpensesDocument, baseOptions);
+        }
+export type EntertainmentExpensesQueryHookResult = ReturnType<typeof useEntertainmentExpensesQuery>;
+export type EntertainmentExpensesLazyQueryHookResult = ReturnType<typeof useEntertainmentExpensesLazyQuery>;
+export type EntertainmentExpensesQueryResult = Apollo.QueryResult<EntertainmentExpensesQuery, EntertainmentExpensesQueryVariables>;
 export const ExpensesDocument = gql`
     query Expenses($limit: Int!, $offset: Int) {
   expenses(limit: $limit, offset: $offset) {
@@ -703,6 +1002,312 @@ export function useExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<E
 export type ExpensesQueryHookResult = ReturnType<typeof useExpensesQuery>;
 export type ExpensesLazyQueryHookResult = ReturnType<typeof useExpensesLazyQuery>;
 export type ExpensesQueryResult = Apollo.QueryResult<ExpensesQuery, ExpensesQueryVariables>;
+export const GiftsExpensesDocument = gql`
+    query GiftsExpenses($limit: Int!, $offset: Int) {
+  giftsExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useGiftsExpensesQuery__
+ *
+ * To run a query within a React component, call `useGiftsExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGiftsExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGiftsExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGiftsExpensesQuery(baseOptions: Apollo.QueryHookOptions<GiftsExpensesQuery, GiftsExpensesQueryVariables>) {
+        return Apollo.useQuery<GiftsExpensesQuery, GiftsExpensesQueryVariables>(GiftsExpensesDocument, baseOptions);
+      }
+export function useGiftsExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GiftsExpensesQuery, GiftsExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<GiftsExpensesQuery, GiftsExpensesQueryVariables>(GiftsExpensesDocument, baseOptions);
+        }
+export type GiftsExpensesQueryHookResult = ReturnType<typeof useGiftsExpensesQuery>;
+export type GiftsExpensesLazyQueryHookResult = ReturnType<typeof useGiftsExpensesLazyQuery>;
+export type GiftsExpensesQueryResult = Apollo.QueryResult<GiftsExpensesQuery, GiftsExpensesQueryVariables>;
+export const GroceriesExpensesDocument = gql`
+    query GroceriesExpenses($limit: Int!, $offset: Int) {
+  groceriesExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useGroceriesExpensesQuery__
+ *
+ * To run a query within a React component, call `useGroceriesExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroceriesExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroceriesExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGroceriesExpensesQuery(baseOptions: Apollo.QueryHookOptions<GroceriesExpensesQuery, GroceriesExpensesQueryVariables>) {
+        return Apollo.useQuery<GroceriesExpensesQuery, GroceriesExpensesQueryVariables>(GroceriesExpensesDocument, baseOptions);
+      }
+export function useGroceriesExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GroceriesExpensesQuery, GroceriesExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<GroceriesExpensesQuery, GroceriesExpensesQueryVariables>(GroceriesExpensesDocument, baseOptions);
+        }
+export type GroceriesExpensesQueryHookResult = ReturnType<typeof useGroceriesExpensesQuery>;
+export type GroceriesExpensesLazyQueryHookResult = ReturnType<typeof useGroceriesExpensesLazyQuery>;
+export type GroceriesExpensesQueryResult = Apollo.QueryResult<GroceriesExpensesQuery, GroceriesExpensesQueryVariables>;
+export const HouseExpensesDocument = gql`
+    query HouseExpenses($limit: Int!, $offset: Int) {
+  houseExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useHouseExpensesQuery__
+ *
+ * To run a query within a React component, call `useHouseExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHouseExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHouseExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useHouseExpensesQuery(baseOptions: Apollo.QueryHookOptions<HouseExpensesQuery, HouseExpensesQueryVariables>) {
+        return Apollo.useQuery<HouseExpensesQuery, HouseExpensesQueryVariables>(HouseExpensesDocument, baseOptions);
+      }
+export function useHouseExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HouseExpensesQuery, HouseExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<HouseExpensesQuery, HouseExpensesQueryVariables>(HouseExpensesDocument, baseOptions);
+        }
+export type HouseExpensesQueryHookResult = ReturnType<typeof useHouseExpensesQuery>;
+export type HouseExpensesLazyQueryHookResult = ReturnType<typeof useHouseExpensesLazyQuery>;
+export type HouseExpensesQueryResult = Apollo.QueryResult<HouseExpensesQuery, HouseExpensesQueryVariables>;
+export const InstallmentsExpensesDocument = gql`
+    query InstallmentsExpenses($limit: Int!, $offset: Int) {
+  installmentsExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useInstallmentsExpensesQuery__
+ *
+ * To run a query within a React component, call `useInstallmentsExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInstallmentsExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInstallmentsExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useInstallmentsExpensesQuery(baseOptions: Apollo.QueryHookOptions<InstallmentsExpensesQuery, InstallmentsExpensesQueryVariables>) {
+        return Apollo.useQuery<InstallmentsExpensesQuery, InstallmentsExpensesQueryVariables>(InstallmentsExpensesDocument, baseOptions);
+      }
+export function useInstallmentsExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InstallmentsExpensesQuery, InstallmentsExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<InstallmentsExpensesQuery, InstallmentsExpensesQueryVariables>(InstallmentsExpensesDocument, baseOptions);
+        }
+export type InstallmentsExpensesQueryHookResult = ReturnType<typeof useInstallmentsExpensesQuery>;
+export type InstallmentsExpensesLazyQueryHookResult = ReturnType<typeof useInstallmentsExpensesLazyQuery>;
+export type InstallmentsExpensesQueryResult = Apollo.QueryResult<InstallmentsExpensesQuery, InstallmentsExpensesQueryVariables>;
+export const MedicalExpensesDocument = gql`
+    query MedicalExpenses($limit: Int!, $offset: Int) {
+  medicalExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useMedicalExpensesQuery__
+ *
+ * To run a query within a React component, call `useMedicalExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMedicalExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMedicalExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useMedicalExpensesQuery(baseOptions: Apollo.QueryHookOptions<MedicalExpensesQuery, MedicalExpensesQueryVariables>) {
+        return Apollo.useQuery<MedicalExpensesQuery, MedicalExpensesQueryVariables>(MedicalExpensesDocument, baseOptions);
+      }
+export function useMedicalExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MedicalExpensesQuery, MedicalExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<MedicalExpensesQuery, MedicalExpensesQueryVariables>(MedicalExpensesDocument, baseOptions);
+        }
+export type MedicalExpensesQueryHookResult = ReturnType<typeof useMedicalExpensesQuery>;
+export type MedicalExpensesLazyQueryHookResult = ReturnType<typeof useMedicalExpensesLazyQuery>;
+export type MedicalExpensesQueryResult = Apollo.QueryResult<MedicalExpensesQuery, MedicalExpensesQueryVariables>;
+export const OtherExpensesDocument = gql`
+    query OtherExpenses($limit: Int!, $offset: Int) {
+  otherExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useOtherExpensesQuery__
+ *
+ * To run a query within a React component, call `useOtherExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOtherExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOtherExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useOtherExpensesQuery(baseOptions: Apollo.QueryHookOptions<OtherExpensesQuery, OtherExpensesQueryVariables>) {
+        return Apollo.useQuery<OtherExpensesQuery, OtherExpensesQueryVariables>(OtherExpensesDocument, baseOptions);
+      }
+export function useOtherExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OtherExpensesQuery, OtherExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<OtherExpensesQuery, OtherExpensesQueryVariables>(OtherExpensesDocument, baseOptions);
+        }
+export type OtherExpensesQueryHookResult = ReturnType<typeof useOtherExpensesQuery>;
+export type OtherExpensesLazyQueryHookResult = ReturnType<typeof useOtherExpensesLazyQuery>;
+export type OtherExpensesQueryResult = Apollo.QueryResult<OtherExpensesQuery, OtherExpensesQueryVariables>;
+export const PersonalExpensesDocument = gql`
+    query PersonalExpenses($limit: Int!, $offset: Int) {
+  personalExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __usePersonalExpensesQuery__
+ *
+ * To run a query within a React component, call `usePersonalExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePersonalExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePersonalExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function usePersonalExpensesQuery(baseOptions: Apollo.QueryHookOptions<PersonalExpensesQuery, PersonalExpensesQueryVariables>) {
+        return Apollo.useQuery<PersonalExpensesQuery, PersonalExpensesQueryVariables>(PersonalExpensesDocument, baseOptions);
+      }
+export function usePersonalExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PersonalExpensesQuery, PersonalExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<PersonalExpensesQuery, PersonalExpensesQueryVariables>(PersonalExpensesDocument, baseOptions);
+        }
+export type PersonalExpensesQueryHookResult = ReturnType<typeof usePersonalExpensesQuery>;
+export type PersonalExpensesLazyQueryHookResult = ReturnType<typeof usePersonalExpensesLazyQuery>;
+export type PersonalExpensesQueryResult = Apollo.QueryResult<PersonalExpensesQuery, PersonalExpensesQueryVariables>;
+export const TaxesExpensesDocument = gql`
+    query TaxesExpenses($limit: Int!, $offset: Int) {
+  taxesExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useTaxesExpensesQuery__
+ *
+ * To run a query within a React component, call `useTaxesExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTaxesExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTaxesExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useTaxesExpensesQuery(baseOptions: Apollo.QueryHookOptions<TaxesExpensesQuery, TaxesExpensesQueryVariables>) {
+        return Apollo.useQuery<TaxesExpensesQuery, TaxesExpensesQueryVariables>(TaxesExpensesDocument, baseOptions);
+      }
+export function useTaxesExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TaxesExpensesQuery, TaxesExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<TaxesExpensesQuery, TaxesExpensesQueryVariables>(TaxesExpensesDocument, baseOptions);
+        }
+export type TaxesExpensesQueryHookResult = ReturnType<typeof useTaxesExpensesQuery>;
+export type TaxesExpensesLazyQueryHookResult = ReturnType<typeof useTaxesExpensesLazyQuery>;
+export type TaxesExpensesQueryResult = Apollo.QueryResult<TaxesExpensesQuery, TaxesExpensesQueryVariables>;
+export const TransportExpensesDocument = gql`
+    query TransportExpenses($limit: Int!, $offset: Int) {
+  transportExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}
+    ${ExpensesResponseFieldFragmentDoc}`;
+
+/**
+ * __useTransportExpensesQuery__
+ *
+ * To run a query within a React component, call `useTransportExpensesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransportExpensesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransportExpensesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useTransportExpensesQuery(baseOptions: Apollo.QueryHookOptions<TransportExpensesQuery, TransportExpensesQueryVariables>) {
+        return Apollo.useQuery<TransportExpensesQuery, TransportExpensesQueryVariables>(TransportExpensesDocument, baseOptions);
+      }
+export function useTransportExpensesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TransportExpensesQuery, TransportExpensesQueryVariables>) {
+          return Apollo.useLazyQuery<TransportExpensesQuery, TransportExpensesQueryVariables>(TransportExpensesDocument, baseOptions);
+        }
+export type TransportExpensesQueryHookResult = ReturnType<typeof useTransportExpensesQuery>;
+export type TransportExpensesLazyQueryHookResult = ReturnType<typeof useTransportExpensesLazyQuery>;
+export type TransportExpensesQueryResult = Apollo.QueryResult<TransportExpensesQuery, TransportExpensesQueryVariables>;
 export const UserDocument = gql`
     query User {
   user {

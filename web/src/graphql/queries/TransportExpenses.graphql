@@ -1,0 +1,5 @@
+query TransportExpenses($limit: Int!, $offset: Int) {
+  transportExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}

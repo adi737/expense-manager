@@ -32,6 +32,171 @@ const apolloClient = (ctx: NextPageContext | undefined) =>
                 };
               },
             },
+            groceriesExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            medicalExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            houseExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            transportExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            taxesExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            entertainmentExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            installmentsExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            personalExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            educationExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            giftsExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
+            otherExpenses: {
+              keyArgs: false,
+              merge(
+                existing: ExpensesResponse | undefined,
+                incoming: ExpensesResponse
+              ): ExpensesResponse {
+                return {
+                  ...incoming,
+                  expenses: [
+                    ...(existing?.expenses ?? []),
+                    ...(incoming.expenses ?? []),
+                  ],
+                };
+              },
+            },
           },
         },
       },

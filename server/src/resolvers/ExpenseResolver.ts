@@ -14,6 +14,7 @@ import {
 import { Expense } from "../entities/Expense";
 import { clearErrors, setErrors, errors } from "../globals";
 import { MyContext } from "../MyContext";
+import { chooseCategory } from "../utils/chooseCategory";
 import { isAuth } from "../utils/isAuth";
 import { Errors } from "./UserResolver";
 
@@ -42,7 +43,7 @@ class ExpenseResponse {
 }
 
 @ObjectType()
-class ExpensesResponse {
+export class ExpensesResponse {
   @Field(() => [Expense], { nullable: true })
   expenses?: Expense[];
 
@@ -93,6 +94,116 @@ export class ExpenseResolver {
       console.error(error);
       throw new Error(error);
     }
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async groceriesExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Groceries", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async medicalExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Medical & Healthcare", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async houseExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("House Items/Supplies", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async transportExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Transport", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async taxesExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Taxes and fees", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async entertainmentExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Entertainment & travels", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async installmentsExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Installments", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async personalExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Personal", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async educationExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Education", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async giftsExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Gifts/Donations", req, limit, offset);
+  }
+
+  @Query(() => ExpensesResponse)
+  @UseMiddleware(isAuth)
+  async otherExpenses(
+    @Ctx() { req }: MyContext,
+    @Arg("limit", () => Int) limit: number,
+    @Arg("offset", () => Int, { nullable: true }) offset?: number
+  ): Promise<ExpensesResponse> {
+    return chooseCategory("Other", req, limit, offset);
   }
 
   @Mutation(() => ExpenseResponse, { nullable: true })

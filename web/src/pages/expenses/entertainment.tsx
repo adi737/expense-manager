@@ -1,5 +1,3 @@
-import { withApollo } from "../utils/withApollo";
-import { useExpensesQuery } from "../generated/graphql";
 import {
   Button,
   Table,
@@ -11,15 +9,20 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Expense } from "../generated/graphql";
-import AddExpense from "../components/AddExpense";
-import ExpenseDesktop from "../components/ExpenseDesktop";
-import ExpenseMobile from "../components/ExpenseMobile";
-import { Layout } from "../components/Layout";
-import Login from "../components/Login";
+import AddExpense from "../../components/AddExpense";
+import ExpenseDesktop from "../../components/ExpenseDesktop";
+import ExpenseMobile from "../../components/ExpenseMobile";
+import { Layout } from "../../components/Layout";
+import Login from "../../components/Login";
 
-const Index: React.FC = () => {
-  const { data, loading, fetchMore } = useExpensesQuery({
+import {
+  Expense,
+  useEntertainmentExpensesQuery,
+} from "../../generated/graphql";
+import { withApollo } from "../../utils/withApollo";
+
+const Entertainment: React.FC = () => {
+  const { data, loading, fetchMore } = useEntertainmentExpensesQuery({
     variables: { limit: 10 },
     notifyOnNetworkStatusChange: true,
   });
@@ -46,7 +49,7 @@ const Index: React.FC = () => {
     return null;
   }
 
-  if (data?.expenses.auth?.includes("not authenticated")) {
+  if (data?.entertainmentExpenses.auth?.includes("not authenticated")) {
     return <Login />;
   }
 
@@ -57,12 +60,12 @@ const Index: React.FC = () => {
           <AddExpense />
           <Table variant="simple" w="100%">
             <TableCaption>
-              {data.expenses.isMore ? (
+              {data.entertainmentExpenses.isMore ? (
                 <Button
                   onClick={() => {
                     fetchMore({
                       variables: {
-                        offset: data.expenses.expenses?.length,
+                        offset: data.entertainmentExpenses.expenses?.length,
                       },
                     });
                   }}
@@ -82,7 +85,7 @@ const Index: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {data.expenses.expenses?.map((expense) => (
+              {data.entertainmentExpenses.expenses?.map((expense) => (
                 <ExpenseDesktop key={expense.id} expense={expense as Expense} />
               ))}
             </Tbody>
@@ -102,12 +105,12 @@ const Index: React.FC = () => {
           <AddExpense />
           <Table variant="simple" colorScheme="teal" w="100%">
             <TableCaption>
-              {data.expenses.isMore ? (
+              {data.entertainmentExpenses.isMore ? (
                 <Button
                   onClick={() => {
                     fetchMore({
                       variables: {
-                        offset: data.expenses.expenses?.length,
+                        offset: data.entertainmentExpenses.expenses?.length,
                       },
                     });
                   }}
@@ -118,11 +121,13 @@ const Index: React.FC = () => {
               ) : null}
             </TableCaption>
             <Tbody>
-              {data.expenses.expenses?.map((expense, i) => (
+              {data.entertainmentExpenses.expenses?.map((expense, i) => (
                 <ExpenseMobile
                   key={i}
                   expense={expense as Expense}
-                  prevExpense={(data.expenses.expenses as Expense[])[i - 1]}
+                  prevExpense={
+                    (data.entertainmentExpenses.expenses as Expense[])[i - 1]
+                  }
                 />
               ))}
             </Tbody>
@@ -133,4 +138,4 @@ const Index: React.FC = () => {
   );
 };
 
-export default withApollo({ ssr: true })(Index);
+export default withApollo({ ssr: true })(Entertainment);

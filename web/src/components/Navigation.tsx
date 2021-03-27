@@ -66,18 +66,43 @@ const Navigation: React.FC = () => {
                   <MenuList>
                     {/* MenuItems are not rendered unless Menu is open */}
                     <NextLnik href="/" passHref>
-                      <MenuItem as="a">New Window</MenuItem>
+                      <MenuItem as="a">All</MenuItem>
                     </NextLnik>
-                    <MenuItem>Open Closed Tab</MenuItem>
-                    <MenuItem>Open File</MenuItem>
+                    <NextLnik href="/expenses/groceries" passHref>
+                      <MenuItem as="a">Groceries</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/medical" passHref>
+                      <MenuItem as="a">Medical & Healthcare</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/house" passHref>
+                      <MenuItem as="a">House Items/Supplies</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/transport" passHref>
+                      <MenuItem as="a">Transport</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/taxes" passHref>
+                      <MenuItem as="a">Taxes and fees</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/entertainment" passHref>
+                      <MenuItem as="a">Entertainment & travels</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/installments" passHref>
+                      <MenuItem as="a">Installments</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/personal" passHref>
+                      <MenuItem as="a">Personal</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/education" passHref>
+                      <MenuItem as="a">Education</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/gifts" passHref>
+                      <MenuItem as="a">Gifts/Donations</MenuItem>
+                    </NextLnik>
+                    <NextLnik href="/expenses/other" passHref>
+                      <MenuItem as="a">Other</MenuItem>
+                    </NextLnik>
                   </MenuList>
                 </Menu>
-
-                <NextLnik href="/" passHref>
-                  <Link textAlign="center" d="block">
-                    Weekly expenses
-                  </Link>
-                </NextLnik>
                 <Button
                   d="block"
                   mx="auto"

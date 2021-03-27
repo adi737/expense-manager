@@ -7,7 +7,6 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { useRouter } from "next/dist/client/router";
 import NextLink from "next/link";
 
 import InputField from "./InputField";
@@ -15,12 +14,8 @@ import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useApolloClient } from "@apollo/client";
 
-// interface LoginProps { }
-
 const Login: React.FC = () => {
   const [login, { data }] = useLoginMutation();
-
-  const router = useRouter();
 
   const { resetStore } = useApolloClient();
 
@@ -33,9 +28,6 @@ const Login: React.FC = () => {
 
           if (data?.login.errors) {
             actions.setErrors(toErrorMap(data.login.errors));
-          } else if (typeof router.query.next === "string") {
-            // pending
-            router.push(router.query.next);
           } else {
             await resetStore();
           }

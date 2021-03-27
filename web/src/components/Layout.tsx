@@ -8,6 +8,7 @@ export const Layout: React.FC = ({ children }) => {
       <Navigation />
       <Box
         mx="auto"
+        my={14}
         w="100%"
         maxW={{
           sm: "600px",

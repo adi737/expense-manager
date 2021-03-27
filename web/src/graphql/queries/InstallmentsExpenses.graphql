@@ -1,0 +1,5 @@
+query InstallmentsExpenses($limit: Int!, $offset: Int) {
+  installmentsExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}

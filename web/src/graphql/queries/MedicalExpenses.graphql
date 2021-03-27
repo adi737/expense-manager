@@ -1,0 +1,5 @@
+query MedicalExpenses($limit: Int!, $offset: Int) {
+  medicalExpenses(limit: $limit, offset: $offset) {
+    ...ExpensesResponseField
+  }
+}

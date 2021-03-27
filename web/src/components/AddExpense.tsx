@@ -41,6 +41,189 @@ const AddExpense: React.FC = () => {
                 ],
               };
             },
+            groceriesExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Groceries") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            medicalExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (
+                data?.addExpense?.expense?.category === "Medical & Healthcare"
+              ) {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            houseExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (
+                data?.addExpense?.expense?.category === "House Items/Supplies"
+              ) {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            transportExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Transport") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            taxesExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Taxes and fees") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            entertainmentExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (
+                data?.addExpense?.expense?.category ===
+                "Entertainment & travels"
+              ) {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            installmentsExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Installments") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            personalExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Personal") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            educationExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Education") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            giftsExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Gifts/Donations") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
+            otherExpenses(existingExpensesRefs: ExpensesResponse) {
+              if (data?.addExpense?.expense?.category === "Other") {
+                const newExpenseRef = cache.writeFragment({
+                  data: data?.addExpense?.expense,
+                  fragment: ExpenseFieldFragmentDoc,
+                });
+
+                return {
+                  ...existingExpensesRefs,
+                  expenses: [
+                    newExpenseRef,
+                    ...(existingExpensesRefs.expenses ?? []),
+                  ],
+                };
+              } else return existingExpensesRefs;
+            },
           },
         });
       }
@@ -54,7 +237,6 @@ const AddExpense: React.FC = () => {
   return (
     <Box textAlign="center">
       <Button
-        mt="3rem"
         mb="1rem"
         onClick={onOpen}
         position="static"
