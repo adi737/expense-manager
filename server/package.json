@@ -26,8 +26,9 @@
    "dependencies": {
       "apollo-server-express": "^2.21.0",
       "argon2": "^0.27.1",
+      "class-validator": "^0.13.1",
       "connect-redis": "^5.1.0",
-      "dotenv": "^8.2.0",
+      "dotenv-safe": "^8.2.0",
       "express": "^4.17.1",
       "express-session": "^1.17.1",
       "graphql": "^15.5.0",
@@ -42,6 +43,7 @@
    "scripts": {
       "start": "nodemon dist/index.js",
       "start2": "nodemon --exec ts-node src/index.ts",
-      "watch": "tsc -w"
+      "watch": "tsc -w",
+      "gen-env": "npx gen-env-types .env -o src/env.d.ts -e ." 
    }
 }

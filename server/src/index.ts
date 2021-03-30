@@ -3,22 +3,19 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
-import { createConnection } from "typeorm";
-import "dotenv/config";
+import "dotenv-safe/config";
 import cors from "cors";
 import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { __prod__ } from "./globals";
-import { User } from "./entities/User";
-import path from "path";
-import { Expense } from "./entities/Expense";
 import { ExpenseResolver } from "./resolvers/ExpenseResolver";
+import { createDatabaseConnection } from "./utils/createDatabaseConnection";
 
 const app = express();
 
 const RedisStore = connectRedis(session);
-const redis = new Redis();
+const redis = new Redis(process.env.REDIS_URL);
 
 app.use(
   session({
@@ -32,35 +29,23 @@ app.use(
       httpOnly: true,
       sameSite: "lax",
       secure: __prod__,
+      domain: __prod__ ? process.env.DOMAIN : undefined,
     },
-    secret: process.env.REDIS_SECRET as string,
+    secret: process.env.REDIS_SECRET,
     resave: false,
     saveUninitialized: false,
   })
 );
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
   })
 );
 
 const connectApolloServer = async () => {
   try {
-    const connection = await createConnection({
-      type: "postgres",
-      host: "localhost",
-      port: 5432,
-      username: "postgres",
-      password: "1234",
-      database: "expense_manager",
-      synchronize: true,
-      logging: true,
-      migrations: [path.join(__dirname, "./migrations/*")],
-      entities: [User, Expense],
-    });
-
-    await connection.runMigrations();
+    await createDatabaseConnection();
 
     const apolloServer = new ApolloServer({
       schema: await buildSchema({
