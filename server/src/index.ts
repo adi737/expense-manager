@@ -45,11 +45,13 @@ app.use(
   })
 );
 
+const environment = process.env.NODE_ENV || "production";
+
 if (__prod__) {
   https.createServer(
     {
-      key: fs.readFileSync("./ssl/keys/server.key"),
-      cert: fs.readFileSync("./ssl/keys/server.crt"),
+      key: fs.readFileSync(`./ssl/${environment}/server.key`),
+      cert: fs.readFileSync(`./ssl/${environment}/server.crt`),
     },
     app
   );
