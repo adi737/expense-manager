@@ -7,9 +7,6 @@ import { __prod__ } from "../globals";
 export const createDatabaseConnection = (): Promise<Connection> =>
   __prod__
     ? createConnection({
-        extra: {
-          ssl: true,
-        },
         ssl: { rejectUnauthorized: false },
         type: "postgres",
         url: process.env.DATABASE_URL,
