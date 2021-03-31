@@ -10,6 +10,7 @@ export const createDatabaseConnection = (): Promise<Connection> =>
         extra: {
           ssl: true,
         },
+        ssl: { rejectUnauthorized: false },
         type: "postgres",
         url: process.env.DATABASE_URL,
         logging: true,
