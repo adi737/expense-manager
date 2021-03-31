@@ -42,8 +42,9 @@
    },
    "scripts": {
       "start": "node dist/index.js",
-      "dev": "nodemon dist/index.js",
+      "postinstall": "tsc",
       "watch": "tsc -w",
+      "dev": "nodemon dist/index.js",
       "gen-env": "npx gen-env-types .env -o src/env.d.ts -e ." ,
       "start2": "nodemon --exec ts-node src/index.ts"
    }
