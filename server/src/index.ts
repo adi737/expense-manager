@@ -13,6 +13,7 @@ import fs from "fs";
 import { __prod__ } from "./globals";
 import { ExpenseResolver } from "./resolvers/ExpenseResolver";
 import { createDatabaseConnection } from "./utils/createDatabaseConnection";
+import path from "path";
 
 const app = express();
 
@@ -48,8 +49,8 @@ app.use(
 if (__prod__) {
   https.createServer(
     {
-      key: fs.readFileSync(`./ssl/PRODUCTION/server.key`),
-      cert: fs.readFileSync(`./ssl/PRODUCTION/server.crt`),
+      key: fs.readFileSync(path.resolve("dist/ssl/keys/server.key")),
+      cert: fs.readFileSync(path.resolve("dist/ssl/keys/server.crt")),
     },
     app
   );
