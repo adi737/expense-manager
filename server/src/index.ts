@@ -49,8 +49,8 @@ app.use(
 if (__prod__) {
   https.createServer(
     {
-      key: fs.readFileSync(path.resolve("dist/ssl/keys/server.key")),
-      cert: fs.readFileSync(path.resolve("dist/ssl/keys/server.crt")),
+      key: fs.readFileSync("./ssl/keys/server.key"),
+      cert: fs.readFileSync("./ssl/keys/server.crt"),
     },
     app
   );
