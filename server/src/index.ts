@@ -8,6 +8,8 @@ import cors from "cors";
 import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
+import https from "https";
+import fs from "fs";
 import { __prod__ } from "./globals";
 import { ExpenseResolver } from "./resolvers/ExpenseResolver";
 import { createDatabaseConnection } from "./utils/createDatabaseConnection";
@@ -43,6 +45,16 @@ app.use(
   })
 );
 
+if (__prod__) {
+  https.createServer(
+    {
+      key: fs.readFileSync(`./ssl/PRODUCTION/server.key`),
+      cert: fs.readFileSync(`./ssl/PRODUCTION/server.crt`),
+    },
+    app
+  );
+}
+
 const connectApolloServer = async () => {
   try {
     await createDatabaseConnection();
@@ -50,6 +62,7 @@ const connectApolloServer = async () => {
     const apolloServer = new ApolloServer({
       schema: await buildSchema({
         resolvers: [UserResolver, ExpenseResolver],
+        validate: false,
       }),
       context: ({ req, res }) => ({ req, res, redis }),
     });
