@@ -13,7 +13,6 @@ import fs from "fs";
 import { __prod__ } from "./globals";
 import { ExpenseResolver } from "./resolvers/ExpenseResolver";
 import { createDatabaseConnection } from "./utils/createDatabaseConnection";
-import path from "path";
 
 const app = express();
 
