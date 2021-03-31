@@ -8,12 +8,9 @@ import cors from "cors";
 import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import https from "https";
-import fs from "fs";
 import { __prod__ } from "./globals";
 import { ExpenseResolver } from "./resolvers/ExpenseResolver";
 import { createDatabaseConnection } from "./utils/createDatabaseConnection";
-import path from "path";
 
 const app = express();
 
@@ -45,16 +42,6 @@ app.use(
     credentials: true,
   })
 );
-
-if (__prod__) {
-  https.createServer(
-    {
-      key: fs.readFileSync(path.resolve("dist/ssl/production/server.key")),
-      cert: fs.readFileSync(path.resolve("dist/ssl/production/server.crt")),
-    },
-    app
-  );
-}
 
 const connectApolloServer = async () => {
   try {
