@@ -13,6 +13,7 @@ import fs from "fs";
 import { __prod__ } from "./globals";
 import { ExpenseResolver } from "./resolvers/ExpenseResolver";
 import { createDatabaseConnection } from "./utils/createDatabaseConnection";
+import path from "path";
 
 const app = express();
 
@@ -45,13 +46,11 @@ app.use(
   })
 );
 
-const environment = process.env.NODE_ENV || "production";
-
 if (__prod__) {
   https.createServer(
     {
-      key: fs.readFileSync(`./ssl/${environment}/server.key`),
-      cert: fs.readFileSync(`./ssl/${environment}/server.crt`),
+      key: fs.readFileSync(path.resolve("dist/ssl/production/server.key")),
+      cert: fs.readFileSync(path.resolve("dist/ssl/production/server.crt")),
     },
     app
   );
