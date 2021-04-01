@@ -45,7 +45,9 @@ app.use(
 
 const connectApolloServer = async () => {
   try {
-    await createDatabaseConnection();
+    const connection = await createDatabaseConnection();
+
+    await connection.runMigrations();
 
     const apolloServer = new ApolloServer({
       schema: await buildSchema({

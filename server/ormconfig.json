@@ -1,0 +1,19 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "password": "1234",
+  "database": "expense_manager",
+  "synchronize": false,
+  "logging": true,
+  "entities": [
+    "dist/entities/*"
+  ],
+  "migrations": [
+    "dist/migrations/*"
+  ],
+  "cli": {
+    "migrationsDir": "src/migrations" 
+  }
+}

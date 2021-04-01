@@ -20,15 +20,4 @@ export const createDatabaseConnection = (): Promise<Connection> =>
         migrations: [path.join(__dirname, "./migrations/*")],
         entities: [User, Expense],
       })
-    : createConnection({
-        type: "postgres",
-        host: "localhost",
-        port: 5432,
-        username: "postgres",
-        password: "1234",
-        database: "expense_manager",
-        synchronize: true,
-        logging: true,
-        migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [User, Expense],
-      });
+    : createConnection();
