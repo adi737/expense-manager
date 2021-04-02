@@ -31,7 +31,7 @@ app.use(
       httpOnly: true,
       sameSite: "lax",
       secure: __prod__,
-      domain: __prod__ ? process.env.DOMAIN : undefined,
+      // domain: __prod__ ? process.env.DOMAIN : undefined,
     },
     secret: process.env.REDIS_SECRET,
     resave: false,
