@@ -17,13 +17,15 @@ const app = express();
 const RedisStore = connectRedis(session);
 const redis = new Redis(process.env.REDIS_URL);
 
+app.enable("trust proxy");
 app.use(
   session({
-    name: "id",
+    name: "sid",
     store: new RedisStore({
       client: redis,
       disableTouch: true,
     }),
+    proxy: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
       httpOnly: true,
@@ -42,7 +44,6 @@ app.use(
     credentials: true,
   })
 );
-app.set("trust proxy", 1);
 
 const connectApolloServer = async () => {
   try {
