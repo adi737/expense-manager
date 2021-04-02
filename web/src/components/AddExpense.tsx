@@ -11,7 +11,6 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { useRouter } from "next/dist/client/router";
 import React from "react";
 import {
   ExpenseFieldFragmentDoc,
@@ -22,7 +21,13 @@ import { toErrorMap } from "../utils/toErrorMap";
 import InputField from "./InputField";
 
 const AddExpense: React.FC = () => {
-  const [addExpense, { error }] = useAddExpenseMutation({
+  const [
+    addExpense,
+    {
+      error,
+      client: { resetStore },
+    },
+  ] = useAddExpenseMutation({
     update(cache, { data }) {
       if (!data?.addExpense?.errors) {
         cache.modify({
@@ -232,8 +237,6 @@ const AddExpense: React.FC = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const router = useRouter();
-
   return (
     <Box textAlign="center">
       <Button
@@ -259,7 +262,7 @@ const AddExpense: React.FC = () => {
                 variables: { options: values },
               });
               if (error?.message.includes("not authenticated")) {
-                router.push("/login");
+                await resetStore();
               } else if (data?.addExpense?.errors) {
                 actions.setErrors(toErrorMap(data.addExpense.errors));
               } else {

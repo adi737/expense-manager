@@ -51,7 +51,7 @@ const ActivateAccount: NextPage<ActivateAccountProps> = ({ id, token }) => {
       <Text textAlign="center" mt={12}>
         Account has been activated
       </Text>
-      <NextLink href="/login" passHref>
+      <NextLink href="/" passHref>
         <Link textDecor="underline" fontWeight="medium">
           Click here to sign in
         </Link>
