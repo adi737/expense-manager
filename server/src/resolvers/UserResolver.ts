@@ -155,7 +155,7 @@ export class UserResolver {
       const to = user.email;
       const subject = "Activate your account";
       const text = "Link to account activation";
-      const link = `http://localhost:3000/activateAccount?id=${id}&token=${token}`;
+      const link = `${process.env.APP_URL}/activateAccount?id=${id}&token=${token}`;
 
       await redis.set(
         process.env.ACTIVATE_USER + token,
@@ -222,7 +222,7 @@ export class UserResolver {
       const to = user.raw[0].email;
       const subject = "Activate your account";
       const text = "Click here to activate your account";
-      const link = `http://localhost:3000/activateAccount?id=${id}&token=${token}`;
+      const link = `${process.env.APP_URL}/activateAccount?id=${id}&token=${token}`;
 
       await sendEmail(to, subject, text, link);
 
@@ -334,7 +334,7 @@ export class UserResolver {
       const to = email;
       const subject = "Reset your password";
       const text = "Click here to reset your password";
-      const link = `http://localhost:3000/resetPassword?id=${user.id}&token=${token}`;
+      const link = `${process.env.APP_URL}/resetPassword?id=${user.id}&token=${token}`;
 
       await sendEmail(to, subject, text, link);
 

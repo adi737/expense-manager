@@ -6,6 +6,6 @@ declare namespace NodeJS {
     ACTIVATE_USER: string;
     RESET_PASSWORD: string;
     REDIS_URL: string;
-    CORS_ORIGIN: string;
+    APP_URL: string;
   }
 }
