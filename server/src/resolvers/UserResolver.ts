@@ -290,7 +290,7 @@ export class UserResolver {
           throw new Error(err);
         }
 
-        res.clearCookie("id");
+        res.clearCookie("sid");
         resolve(true);
       })
     );
