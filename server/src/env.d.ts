@@ -1,6 +1,6 @@
 declare namespace NodeJS {
   interface ProcessEnv {
-    REDIS_SECRET: string;
+    SESSION_SECRET: string;
     EMAIL: string;
     PASSWORD: string;
     ACTIVATE_USER: string;

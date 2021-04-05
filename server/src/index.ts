@@ -25,15 +25,14 @@ app.use(
       client: redis,
       disableTouch: true,
     }),
-    proxy: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
       httpOnly: true,
       sameSite: "lax",
-      // secure: __prod__,
+      secure: __prod__,
       domain: __prod__ ? process.env.DOMAIN : undefined,
     },
-    secret: process.env.REDIS_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
