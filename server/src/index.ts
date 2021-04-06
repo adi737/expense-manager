@@ -17,7 +17,6 @@ const app = express();
 const RedisStore = connectRedis(session);
 const redis = new Redis(process.env.REDIS_URL);
 
-app.enable("trust proxy");
 app.set("trust proxy", 1);
 app.use(
   session({
@@ -29,14 +28,13 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "lax",
       secure: __prod__,
       domain: __prod__ ? process.env.DOMAIN : undefined,
     },
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    proxy: true,
   })
 );
 app.use(
