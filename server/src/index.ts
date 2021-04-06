@@ -28,7 +28,7 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",
       secure: __prod__,
       domain: __prod__ ? process.env.DOMAIN : undefined,
     },
