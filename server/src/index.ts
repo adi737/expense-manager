@@ -17,7 +17,7 @@ const app = express();
 const RedisStore = connectRedis(session);
 const redis = new Redis(process.env.REDIS_URL);
 
-app.set("trust proxy", 2);
+app.set("trust proxy", 1);
 app.use(
   session({
     name: "sid",
@@ -35,6 +35,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
   })
 );
 app.use(
