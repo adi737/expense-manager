@@ -17,7 +17,7 @@ const app = express();
 const RedisStore = connectRedis(session);
 const redis = new Redis(process.env.REDIS_URL);
 
-app.set("trust proxy", 1);
+app.set("trust proxy", true);
 app.use(
   session({
     name: "sid",
