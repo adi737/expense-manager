@@ -1,34 +1,46 @@
-import {
-  Button,
-  Table,
-  TableCaption,
-  Tbody,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { withApollo } from "../../utils/withApollo";
+import { useGiftsExpensesQuery } from "../../generated/graphql";
+import { Spinner, Table, Tbody, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Expense } from "../../generated/graphql";
 import AddExpense from "../../components/AddExpense";
 import ExpenseDesktop from "../../components/ExpenseDesktop";
 import ExpenseMobile from "../../components/ExpenseMobile";
 import { Layout } from "../../components/Layout";
 import Login from "../../components/Login";
 
-import { Expense, useGiftsExpensesQuery } from "../../generated/graphql";
-import { withApollo } from "../../utils/withApollo";
-
-const Gifts: React.FC = () => {
+const Index: React.FC = () => {
   const { data, loading, fetchMore } = useGiftsExpensesQuery({
-    variables: { limit: 10 },
+    variables: { limit: 20 },
     notifyOnNetworkStatusChange: true,
   });
 
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const doOnce = useRef(true);
+
   const setViewport = (e: MediaQueryListEvent) => {
     setIsDesktop(e.matches);
   };
+
+  const countSpace = useCallback(async () => {
+    if (loaderRef.current) {
+      const space =
+        window.innerHeight - loaderRef.current.getBoundingClientRect().top;
+
+      if (space >= -100 && !loading && doOnce.current) {
+        doOnce.current = false;
+        await fetchMore({
+          variables: {
+            limit: 15,
+            offset: data?.giftsExpenses.expenses?.length,
+          },
+        });
+        doOnce.current = true;
+      }
+    }
+  }, [data?.giftsExpenses.expenses?.length, fetchMore, loading]);
 
   useEffect(() => {
     const mediaQuery = matchMedia("(min-width: 40rem)");
@@ -42,6 +54,17 @@ const Gifts: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (loaderRef.current) {
+      if (doOnce.current && !loading) {
+        document.addEventListener("scroll", countSpace);
+      }
+    }
+    return () => {
+      document.removeEventListener("scroll", countSpace);
+    };
+  }, [countSpace, loading]);
+
   if (!data) {
     return null;
   }
@@ -52,26 +75,10 @@ const Gifts: React.FC = () => {
 
   return (
     <Layout>
+      <AddExpense />
       {isDesktop ? (
         <>
-          <AddExpense />
           <Table variant="simple" w="100%">
-            <TableCaption>
-              {data.giftsExpenses.isMore ? (
-                <Button
-                  onClick={() => {
-                    fetchMore({
-                      variables: {
-                        offset: data.giftsExpenses.expenses?.length,
-                      },
-                    });
-                  }}
-                  isLoading={loading}
-                >
-                  Fetch more
-                </Button>
-              ) : null}
-            </TableCaption>
             <Thead>
               <Tr>
                 <Th>DATE</Th>
@@ -99,24 +106,7 @@ const Gifts: React.FC = () => {
         </>
       ) : (
         <>
-          <AddExpense />
           <Table variant="simple" colorScheme="teal" w="100%">
-            <TableCaption>
-              {data.giftsExpenses.isMore ? (
-                <Button
-                  onClick={() => {
-                    fetchMore({
-                      variables: {
-                        offset: data.giftsExpenses.expenses?.length,
-                      },
-                    });
-                  }}
-                  isLoading={loading}
-                >
-                  Fetch more
-                </Button>
-              ) : null}
-            </TableCaption>
             <Tbody>
               {data.giftsExpenses.expenses?.map((expense, i) => (
                 <ExpenseMobile
@@ -131,8 +121,24 @@ const Gifts: React.FC = () => {
           </Table>
         </>
       )}
+      {data.giftsExpenses.isMore ? (
+        <Spinner
+          d="block"
+          mx="auto"
+          mt="1rem"
+          onClick={() => {
+            fetchMore({
+              variables: {
+                limit: 15,
+                offset: data.giftsExpenses.expenses?.length,
+              },
+            });
+          }}
+          ref={loaderRef}
+        />
+      ) : null}
     </Layout>
   );
 };
 
-export default withApollo({ ssr: true })(Gifts);
+export default withApollo({ ssr: true })(Index);

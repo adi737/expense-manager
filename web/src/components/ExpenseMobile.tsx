@@ -1,4 +1,5 @@
 import { Tr, Td } from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Fragment } from "react";
 import { useDeleteExpenseMutation, Expense } from "../generated/graphql";
 import { whichIconMobile } from "../utils/whichIconMobile";
@@ -32,31 +33,30 @@ const ExpenseMobile: React.FC<ExpenseMobileProps> = ({
       )}
 
       <Tr>
-        <Td p={2}>{expense.product}</Td>
-        <Td p={2}>{whichIconMobile(expense.category)}</Td>
-        <Td p={2} isNumeric>
+        <Td px={2}>{expense.product}</Td>
+        <Td px={2}>{whichIconMobile(expense.category)}</Td>
+        <Td px={2} isNumeric>
           {expense.price}
         </Td>
-        <Td
-          p={2}
-          onClick={() => {
-            const confirmed = confirm(
-              "Are you sure you want to delete this item?"
-            );
-            if (confirmed) {
-              deleteExpense({
-                variables: { id: expense.id },
-                update(cache) {
-                  cache.evict({ id: "Expense:" + expense.id });
-                },
-              });
-            }
-          }}
-          cursor="pointer"
-          textAlign="center"
-          _hover={{ transform: "scale(1.1)" }}
-        >
-          &#128465;
+        <Td px={2}>
+          <FontAwesomeIcon
+            icon="trash-alt"
+            cursor="pointer"
+            onClick={() => {
+              const confirmed = confirm(
+                "Are you sure you want to delete this item?"
+              );
+
+              if (confirmed) {
+                deleteExpense({
+                  variables: { id: expense.id },
+                  update(cache) {
+                    cache.evict({ id: "Expense:" + expense.id });
+                  },
+                });
+              }
+            }}
+          />
         </Td>
       </Tr>
     </Fragment>

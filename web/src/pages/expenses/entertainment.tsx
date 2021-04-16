@@ -1,37 +1,46 @@
-import {
-  Button,
-  Table,
-  TableCaption,
-  Tbody,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { withApollo } from "../../utils/withApollo";
+import { useEntertainmentExpensesQuery } from "../../generated/graphql";
+import { Spinner, Table, Tbody, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Expense } from "../../generated/graphql";
 import AddExpense from "../../components/AddExpense";
 import ExpenseDesktop from "../../components/ExpenseDesktop";
 import ExpenseMobile from "../../components/ExpenseMobile";
 import { Layout } from "../../components/Layout";
 import Login from "../../components/Login";
 
-import {
-  Expense,
-  useEntertainmentExpensesQuery,
-} from "../../generated/graphql";
-import { withApollo } from "../../utils/withApollo";
-
-const Entertainment: React.FC = () => {
+const Index: React.FC = () => {
   const { data, loading, fetchMore } = useEntertainmentExpensesQuery({
-    variables: { limit: 10 },
+    variables: { limit: 20 },
     notifyOnNetworkStatusChange: true,
   });
 
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const doOnce = useRef(true);
+
   const setViewport = (e: MediaQueryListEvent) => {
     setIsDesktop(e.matches);
   };
+
+  const countSpace = useCallback(async () => {
+    if (loaderRef.current) {
+      const space =
+        window.innerHeight - loaderRef.current.getBoundingClientRect().top;
+
+      if (space >= -100 && !loading && doOnce.current) {
+        doOnce.current = false;
+        await fetchMore({
+          variables: {
+            limit: 15,
+            offset: data?.entertainmentExpenses.expenses?.length,
+          },
+        });
+        doOnce.current = true;
+      }
+    }
+  }, [data?.entertainmentExpenses.expenses?.length, fetchMore, loading]);
 
   useEffect(() => {
     const mediaQuery = matchMedia("(min-width: 40rem)");
@@ -45,6 +54,17 @@ const Entertainment: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (loaderRef.current) {
+      if (doOnce.current && !loading) {
+        document.addEventListener("scroll", countSpace);
+      }
+    }
+    return () => {
+      document.removeEventListener("scroll", countSpace);
+    };
+  }, [countSpace, loading]);
+
   if (!data) {
     return null;
   }
@@ -55,26 +75,10 @@ const Entertainment: React.FC = () => {
 
   return (
     <Layout>
+      <AddExpense />
       {isDesktop ? (
         <>
-          <AddExpense />
           <Table variant="simple" w="100%">
-            <TableCaption>
-              {data.entertainmentExpenses.isMore ? (
-                <Button
-                  onClick={() => {
-                    fetchMore({
-                      variables: {
-                        offset: data.entertainmentExpenses.expenses?.length,
-                      },
-                    });
-                  }}
-                  isLoading={loading}
-                >
-                  Fetch more
-                </Button>
-              ) : null}
-            </TableCaption>
             <Thead>
               <Tr>
                 <Th>DATE</Th>
@@ -102,24 +106,7 @@ const Entertainment: React.FC = () => {
         </>
       ) : (
         <>
-          <AddExpense />
           <Table variant="simple" colorScheme="teal" w="100%">
-            <TableCaption>
-              {data.entertainmentExpenses.isMore ? (
-                <Button
-                  onClick={() => {
-                    fetchMore({
-                      variables: {
-                        offset: data.entertainmentExpenses.expenses?.length,
-                      },
-                    });
-                  }}
-                  isLoading={loading}
-                >
-                  Fetch more
-                </Button>
-              ) : null}
-            </TableCaption>
             <Tbody>
               {data.entertainmentExpenses.expenses?.map((expense, i) => (
                 <ExpenseMobile
@@ -134,8 +121,24 @@ const Entertainment: React.FC = () => {
           </Table>
         </>
       )}
+      {data.entertainmentExpenses.isMore ? (
+        <Spinner
+          d="block"
+          mx="auto"
+          mt="1rem"
+          onClick={() => {
+            fetchMore({
+              variables: {
+                limit: 15,
+                offset: data.entertainmentExpenses.expenses?.length,
+              },
+            });
+          }}
+          ref={loaderRef}
+        />
+      ) : null}
     </Layout>
   );
 };
 
-export default withApollo({ ssr: true })(Entertainment);
+export default withApollo({ ssr: true })(Index);

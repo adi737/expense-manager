@@ -1,34 +1,46 @@
-import {
-  Button,
-  Table,
-  TableCaption,
-  Tbody,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { withApollo } from "../../utils/withApollo";
+import { useTaxesExpensesQuery } from "../../generated/graphql";
+import { Spinner, Table, Tbody, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Expense } from "../../generated/graphql";
 import AddExpense from "../../components/AddExpense";
 import ExpenseDesktop from "../../components/ExpenseDesktop";
 import ExpenseMobile from "../../components/ExpenseMobile";
 import { Layout } from "../../components/Layout";
 import Login from "../../components/Login";
 
-import { Expense, useTaxesExpensesQuery } from "../../generated/graphql";
-import { withApollo } from "../../utils/withApollo";
-
-const Taxes: React.FC = () => {
+const Index: React.FC = () => {
   const { data, loading, fetchMore } = useTaxesExpensesQuery({
-    variables: { limit: 10 },
+    variables: { limit: 20 },
     notifyOnNetworkStatusChange: true,
   });
 
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const doOnce = useRef(true);
+
   const setViewport = (e: MediaQueryListEvent) => {
     setIsDesktop(e.matches);
   };
+
+  const countSpace = useCallback(async () => {
+    if (loaderRef.current) {
+      const space =
+        window.innerHeight - loaderRef.current.getBoundingClientRect().top;
+
+      if (space >= -100 && !loading && doOnce.current) {
+        doOnce.current = false;
+        await fetchMore({
+          variables: {
+            limit: 15,
+            offset: data?.taxesExpenses.expenses?.length,
+          },
+        });
+        doOnce.current = true;
+      }
+    }
+  }, [data?.taxesExpenses.expenses?.length, fetchMore, loading]);
 
   useEffect(() => {
     const mediaQuery = matchMedia("(min-width: 40rem)");
@@ -42,6 +54,17 @@ const Taxes: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (loaderRef.current) {
+      if (doOnce.current && !loading) {
+        document.addEventListener("scroll", countSpace);
+      }
+    }
+    return () => {
+      document.removeEventListener("scroll", countSpace);
+    };
+  }, [countSpace, loading]);
+
   if (!data) {
     return null;
   }
@@ -52,26 +75,10 @@ const Taxes: React.FC = () => {
 
   return (
     <Layout>
+      <AddExpense />
       {isDesktop ? (
         <>
-          <AddExpense />
           <Table variant="simple" w="100%">
-            <TableCaption>
-              {data.taxesExpenses.isMore ? (
-                <Button
-                  onClick={() => {
-                    fetchMore({
-                      variables: {
-                        offset: data.taxesExpenses.expenses?.length,
-                      },
-                    });
-                  }}
-                  isLoading={loading}
-                >
-                  Fetch more
-                </Button>
-              ) : null}
-            </TableCaption>
             <Thead>
               <Tr>
                 <Th>DATE</Th>
@@ -99,24 +106,7 @@ const Taxes: React.FC = () => {
         </>
       ) : (
         <>
-          <AddExpense />
           <Table variant="simple" colorScheme="teal" w="100%">
-            <TableCaption>
-              {data.taxesExpenses.isMore ? (
-                <Button
-                  onClick={() => {
-                    fetchMore({
-                      variables: {
-                        offset: data.taxesExpenses.expenses?.length,
-                      },
-                    });
-                  }}
-                  isLoading={loading}
-                >
-                  Fetch more
-                </Button>
-              ) : null}
-            </TableCaption>
             <Tbody>
               {data.taxesExpenses.expenses?.map((expense, i) => (
                 <ExpenseMobile
@@ -131,8 +121,24 @@ const Taxes: React.FC = () => {
           </Table>
         </>
       )}
+      {data.taxesExpenses.isMore ? (
+        <Spinner
+          d="block"
+          mx="auto"
+          mt="1rem"
+          onClick={() => {
+            fetchMore({
+              variables: {
+                limit: 15,
+                offset: data.taxesExpenses.expenses?.length,
+              },
+            });
+          }}
+          ref={loaderRef}
+        />
+      ) : null}
     </Layout>
   );
 };
 
-export default withApollo({ ssr: true })(Taxes);
+export default withApollo({ ssr: true })(Index);
